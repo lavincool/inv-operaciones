@@ -34,7 +34,6 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Calcula la cantidad economica de pedido que minimiza los costos totales de inventario.",
         icon: TrendingUp,
-        badge: "Popular",
       },
       {
         title: "Descuento por Cantidad",
@@ -65,7 +64,6 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Cuando la fuente de clientes es limitada (ej. maquinas en una fabrica) y cada una puede fallar.",
         icon: Users,
-        badge: "Disponible",
       },
       {
         title: "Poblacion Infinita",

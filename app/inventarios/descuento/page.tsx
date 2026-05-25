@@ -284,7 +284,7 @@ export default function DescuentoPage() {
                 <ParamField
                   label="D &mdash; Demanda Anual"
                   maxValue={1000000}
-                  minValue={1}
+                  minValue={0}
                   step={50}
                   value={demandaAnual}
                   onChange={setDemandaAnual}
@@ -293,7 +293,7 @@ export default function DescuentoPage() {
                   formatOptions={CURRENCY_FMT}
                   label="S &mdash; Costo de Pedido"
                   maxValue={1000000}
-                  minValue={0.01}
+                  minValue={0}
                   step={1}
                   value={costoPedido}
                   onChange={setCostoPedido}
@@ -302,7 +302,7 @@ export default function DescuentoPage() {
                   formatOptions={{ style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 }}
                   label="i &mdash; Tasa de Mantenimiento"
                   maxValue={1}
-                  minValue={0.005}
+                  minValue={0}
                   step={0.005}
                   value={tasaMantenimiento}
                   onChange={setTasaMantenimiento}
@@ -423,7 +423,7 @@ export default function DescuentoPage() {
                       <NumberField
                         className="w-full"
                         formatOptions={CURRENCY_FMT}
-                        minValue={0.01}
+                        minValue={0}
                         name={`precio-${index}`}
                         step={0.5}
                         value={rango.precioUnitario}

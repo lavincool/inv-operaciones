@@ -13,65 +13,61 @@ export interface ScenarioResult {
   cost: number;
 }
 
-function factorial(n: number): number {
-  if (n <= 1) return 1;
-  let result = 1;
-  for (let i = 2; i <= n; i++) {
-    result *= i;
-  }
-  return result;
-}
-
 /**
- * Fórmula 1: Probabilidad de sistema vacío para s=1
- * P0 = [ Σ(n=0..N) (N!/(N-n)!) * (λ/μ)^n ]^(-1)
+ * Calcula P0 and L for a finite population queueing model with s servers.
+ *
+ * Modelo M/M/s con fuente finita (modelo del reparador de maquinas).
+ * Usa el enfoque de razones sucesivas para estabilidad numerica.
  */
-export function calculateP0(N: number, lambda: number, mu: number): number {
+function calculateModel(
+  N: number,
+  lambda: number,
+  mu: number,
+  s: number,
+): { P0: number; L: number } {
   const rho = lambda / mu;
-  let sum = 0;
+
+  const ratios: number[] = new Array(N + 1).fill(0);
+  ratios[0] = 1;
+
+  for (let n = 1; n <= N; n++) {
+    if (n <= s) {
+      ratios[n] = (ratios[n - 1] * (N - n + 1) * rho) / n;
+    } else {
+      ratios[n] = (ratios[n - 1] * (N - n + 1) * rho) / s;
+    }
+  }
+
+  const sum = ratios.reduce((acc, val) => acc + val, 0);
+  const P0 = 1 / sum;
+
+  let L = 0;
   for (let n = 0; n <= N; n++) {
-    sum += (factorial(N) / factorial(N - n)) * Math.pow(rho, n);
+    L += n * P0 * ratios[n];
   }
-  return 1 / sum;
+
+  return { P0, L };
 }
 
 /**
- * Fórmula 2: Número esperado de unidades en el sistema
- * s=1: L = N - (μ/λ) * (1 - P0)
- * s=2: L = 1.04 (hardcodeado temporal)
+ * Costo Total = (s * Cs) + (L * Cw)
  */
-export function calculateL(N: number, lambda: number, mu: number, P0: number, s: number): number {
-  if (s === 1) {
-    return N - (mu / lambda) * (1 - P0);
-  }
-  if (s === 2) {
-    return 1.04;
-  }
-  return 0;
-}
-
-/**
- * Fórmula 3: Costo Total
- * Costo = (s * Cs) + (L * Cw)
- */
-export function calculateTotalCost(s: number, Cs: number, L: number, Cw: number): number {
+function calculateTotalCost(s: number, Cs: number, L: number, Cw: number): number {
   return s * Cs + L * Cw;
 }
 
 /**
- * Calcula todos los escenarios (s=1 y s=2) a partir de los parámetros
+ * Calcula todos los escenarios para 1 y 2 servidores a partir de los parametros.
  */
 export function calculateScenarios(params: QueueParams): ScenarioResult[] {
   const { N, lambda, mu, Cs, Cw } = params;
 
-  const P0 = calculateP0(N, lambda, mu);
-
   const scenarios: ScenarioResult[] = [];
 
   for (const s of [1, 2]) {
-    const L = calculateL(N, lambda, mu, P0, s);
+    const { P0, L } = calculateModel(N, lambda, mu, s);
     const cost = calculateTotalCost(s, Cs, L, Cw);
-    scenarios.push({ s, P0: s === 1 ? P0 : 0, L, cost });
+    scenarios.push({ s, P0, L, cost });
   }
 
   return scenarios;

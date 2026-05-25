@@ -7,6 +7,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownPopover,
+  Separator,
 } from "@heroui/react";
 import {
   Menu,
@@ -15,6 +16,7 @@ import {
   ChevronRight,
   Boxes,
   Clock,
+  Home,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -125,8 +127,19 @@ export default function HeaderNavbar() {
           Inv. Operaciones
         </Link>
 
-        {/* Desktop nav dropdowns */}
+        {/* Desktop nav */}
         <div className="hidden sm:flex items-center gap-1 ml-8">
+          <Link
+            href="/"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              pathname === "/"
+                ? "text-accent bg-accent/10"
+                : "text-foreground/70 hover:text-foreground hover:bg-default-100"
+            }`}
+          >
+            <Home className="size-4" />
+            <span>Inicio</span>
+          </Link>
           {NAV_CATEGORIES.map((cat) => (
             <Dropdown key={cat.category}>
               <DropdownTrigger
@@ -176,6 +189,21 @@ export default function HeaderNavbar() {
 
           <div className="relative bg-background border-t border-default-100 shadow-2xl animate-in slide-in-from-top-2 duration-300">
             <div className="px-4 py-3 flex flex-col gap-1">
+              <Link
+                href="/"
+                onClick={() => setIsMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  pathname === "/"
+                    ? "bg-accent/10 text-accent"
+                    : "text-foreground/70 hover:bg-default-100 hover:text-foreground"
+                }`}
+              >
+                <Home className="size-4.5 shrink-0" />
+                <span>Inicio</span>
+              </Link>
+
+              <Separator className="my-1" />
+
               {NAV_CATEGORIES.map((cat) => {
                 const isExpanded = expandedCategory === cat.category;
                 const hasActiveChild = cat.items.some((item) =>

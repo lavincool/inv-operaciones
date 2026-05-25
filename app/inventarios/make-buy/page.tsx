@@ -9,14 +9,16 @@ import {
   Label,
   NumberField,
   Separator,
+  Switch,
   Typography,
 } from "@heroui/react";
-import { RotateCcw, ArrowLeft, ShoppingCart, Factory, TrendingDown, Award } from "lucide-react";
+import { RotateCcw, ArrowLeft, ShoppingCart, Factory, TrendingDown, Award, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import {
   calculateMakeBuy,
   type MakeBuyInput,
   type MakeBuyOutput,
+  type Periodo,
 } from "@/lib/make-buy";
 
 /* ------------------------------------------------------------------ */
@@ -33,6 +35,7 @@ interface DefaultParams {
   costoUnitarioFab: number;
   tasaMantenimientoAnual: number;
   capacidadProduccionMensual: number;
+  periodo: Periodo;
 }
 
 const DEFAULT_PARAMS: DefaultParams = {
@@ -45,6 +48,7 @@ const DEFAULT_PARAMS: DefaultParams = {
   costoUnitarioFab: 30,
   tasaMantenimientoAnual: 0.15,
   capacidadProduccionMensual: 150000,
+  periodo: "anual",
 };
 
 /* ------------------------------------------------------------------ */
@@ -186,12 +190,13 @@ interface ResultadoCardProps {
   Q_optima: number;
   qLabel: string;
   CTA: number;
-  desglose_D_anual: string;
+  ctaLabel: string;
+  desglose_D: string;
   desglose_H: string;
   desglose_factor?: string;
   desglose_Q: string;
   desglose_CTA: string;
-  operacionesPorMes: number;
+  operacionesPorPeriodo: number;
   opsLabel: string;
   esGanador: boolean;
 }
@@ -203,12 +208,13 @@ function ResultadoCard({
   Q_optima,
   qLabel,
   CTA,
-  desglose_D_anual,
+  ctaLabel,
+  desglose_D,
   desglose_H,
   desglose_factor,
   desglose_Q,
   desglose_CTA,
-  operacionesPorMes,
+  operacionesPorPeriodo,
   opsLabel,
   esGanador,
 }: ResultadoCardProps) {
@@ -261,7 +267,7 @@ function ResultadoCard({
               color="muted"
               type="body-sm"
             >
-              Costo Total Anual
+              {ctaLabel}
             </Typography>
             <Typography
               className={`mt-1 text-2xl font-bold tabular-nums ${esGanador ? "text-success" : ""}`}
@@ -282,7 +288,7 @@ function ResultadoCard({
               {opsLabel}
             </Typography>
             <Typography className="mt-1 text-lg font-semibold tabular-nums" type="body">
-              {fmtDecimal(operacionesPorMes, 2)}
+              {fmtDecimal(operacionesPorPeriodo, 2)}
             </Typography>
           </div>
 
@@ -296,13 +302,13 @@ function ResultadoCard({
             Desglose del Calculo
           </Typography>
 
-          <PasoDesglose label="Demanda Anual" latex={desglose_D_anual} />
+          <PasoDesglose label="Demanda" latex={desglose_D} />
           <PasoDesglose label="Costo de Mantenimiento (H)" latex={desglose_H} />
           {desglose_factor && (
             <PasoDesglose label="Factor de Produccion (1 - d/p)" latex={desglose_factor} />
           )}
           <PasoDesglose label="Lote Optimo (Q*)" latex={desglose_Q} />
-          <PasoDesglose label="Costo Total Anual (CTA)" latex={desglose_CTA} />
+          <PasoDesglose label="Costo Total" latex={desglose_CTA} />
         </div>
       </Card.Content>
     </Card>
@@ -338,6 +344,9 @@ export default function MakeBuyPage() {
   const [capacidadProduccionMensual, setCapacidadProduccionMensual] = useState(
     DEFAULT_PARAMS.capacidadProduccionMensual,
   );
+  const [periodo, setPeriodo] = useState<Periodo>(DEFAULT_PARAMS.periodo);
+
+  const esAnual = periodo === "anual";
 
   /* ---- calculos ---- */
   const input: MakeBuyInput = useMemo(
@@ -351,6 +360,7 @@ export default function MakeBuyPage() {
       costoUnitarioFab,
       tasaMantenimientoAnual,
       capacidadProduccionMensual,
+      periodo,
     }),
     [
       demandaTotalMensual,
@@ -362,6 +372,7 @@ export default function MakeBuyPage() {
       costoUnitarioFab,
       tasaMantenimientoAnual,
       capacidadProduccionMensual,
+      periodo,
     ],
   );
 
@@ -372,6 +383,16 @@ export default function MakeBuyPage() {
       return null;
     }
   }, [input]);
+
+  /* ---- labels dinamicos ---- */
+  const costoLabel = esAnual ? "Costo Total Anual" : "Costo Total Mensual";
+  const costoCardLabel = esAnual ? "CTA" : "CTM";
+  const opsLabelExt = esAnual ? "Pedidos por Anio" : "Pedidos por Mes";
+  const opsLabelFab = esAnual ? "Corridas de Prod. por Anio" : "Corridas de Prod. por Mes";
+  const periodoLabel = esAnual ? "Anual" : "Mensual";
+  const ahorroLabel = esAnual ? "Ahorro Anual" : "Ahorro Mensual";
+  const costoGlobalLabel = esAnual ? "Costo Total Anual Global" : "Costo Total Mensual Global";
+  const factorH = esAnual ? 1 : 1 / 12;
 
   /* ---- reset ---- */
   const isDefault = useMemo(() => {
@@ -384,7 +405,8 @@ export default function MakeBuyPage() {
       costoPreparacionFab === DEFAULT_PARAMS.costoPreparacionFab &&
       costoUnitarioFab === DEFAULT_PARAMS.costoUnitarioFab &&
       tasaMantenimientoAnual === DEFAULT_PARAMS.tasaMantenimientoAnual &&
-      capacidadProduccionMensual === DEFAULT_PARAMS.capacidadProduccionMensual
+      capacidadProduccionMensual === DEFAULT_PARAMS.capacidadProduccionMensual &&
+      periodo === DEFAULT_PARAMS.periodo
     );
   }, [
     demandaTotalMensual,
@@ -396,6 +418,7 @@ export default function MakeBuyPage() {
     costoUnitarioFab,
     tasaMantenimientoAnual,
     capacidadProduccionMensual,
+    periodo,
   ]);
 
   const handleReset = useCallback(() => {
@@ -408,6 +431,7 @@ export default function MakeBuyPage() {
     setCostoUnitarioFab(DEFAULT_PARAMS.costoUnitarioFab);
     setTasaMantenimientoAnual(DEFAULT_PARAMS.tasaMantenimientoAnual);
     setCapacidadProduccionMensual(DEFAULT_PARAMS.capacidadProduccionMensual);
+    setPeriodo(DEFAULT_PARAMS.periodo);
   }, []);
 
   /* ---- render ---- */
@@ -422,7 +446,13 @@ export default function MakeBuyPage() {
           <ArrowLeft className="size-3.5" />
           <span>Inicio</span>
         </Link>
-        <Typography type="h1">Fabricar o Comprar</Typography>
+        <div className="flex items-center gap-3">
+          <Typography type="h1">Fabricar o Comprar</Typography>
+          <Chip color="accent" size="sm" variant="soft">
+            <CalendarDays className="mr-1 size-3" />
+            {periodoLabel}
+          </Chip>
+        </div>
         <Typography className="mt-2" color="muted" type="body">
           Analisis comparativo entre la compra a proveedor externo (EOQ) y la produccion interna (EPQ)
         </Typography>
@@ -446,6 +476,31 @@ export default function MakeBuyPage() {
         </Card.Header>
         <Card.Content>
           <div className="space-y-6">
+            {/* Toggle periodo */}
+            <div className="flex items-center justify-between rounded-lg border border-default-200 bg-default-50 p-3">
+              <div className="flex items-center gap-3">
+                <CalendarDays className="size-4.5 text-muted" />
+                <div>
+                  <Typography className="text-sm font-medium" type="body">
+                    Periodo de Calculo
+                  </Typography>
+                  <Typography className="text-xs" color="muted" type="body-sm">
+                    {esAnual
+                      ? "Demanda anualizada (x12). H usa la tasa anual completa."
+                      : "Demanda mensual directa. H = i/12 para ser consistente mensualmente."}
+                  </Typography>
+                </div>
+              </div>
+              <Switch
+                isSelected={periodo === "mensual"}
+                onChange={(v) => setPeriodo(v ? "mensual" : "anual")}
+              >
+                <Typography className="text-sm font-medium" type="body">
+                  {periodo === "anual" ? "Anual" : "Mensual"}
+                </Typography>
+              </Switch>
+            </div>
+
             {/* Demanda */}
             <div>
               <Typography
@@ -583,10 +638,21 @@ export default function MakeBuyPage() {
               </div>
               <div className="mt-3 rounded-lg border border-default-200 bg-default-50 p-3">
                 <Typography className="text-xs" color="muted" type="body-sm">
-                  H compra = {fmtPercent(tasaMantenimientoAnual)} x {fmtCurrency(costoUnitarioCompra)} ={" "}
-                  {fmtCurrency(tasaMantenimientoAnual * costoUnitarioCompra)} &emsp; | &emsp;
-                  H fab = {fmtPercent(tasaMantenimientoAnual)} x {fmtCurrency(costoUnitarioFab)} ={" "}
-                  {fmtCurrency(tasaMantenimientoAnual * costoUnitarioFab)}
+                  {esAnual ? (
+                    <>
+                      H compra = {fmtPercent(tasaMantenimientoAnual)} x {fmtCurrency(costoUnitarioCompra)} ={" "}
+                      {fmtCurrency(tasaMantenimientoAnual * costoUnitarioCompra)} &emsp; | &emsp;
+                      H fab = {fmtPercent(tasaMantenimientoAnual)} x {fmtCurrency(costoUnitarioFab)} ={" "}
+                      {fmtCurrency(tasaMantenimientoAnual * costoUnitarioFab)}
+                    </>
+                  ) : (
+                    <>
+                      H compra = {fmtPercent(tasaMantenimientoAnual)} / 12 x {fmtCurrency(costoUnitarioCompra)} ={" "}
+                      {fmtCurrency(tasaMantenimientoAnual * costoUnitarioCompra * factorH)} &emsp; | &emsp;
+                      H fab = {fmtPercent(tasaMantenimientoAnual)} / 12 x {fmtCurrency(costoUnitarioFab)} ={" "}
+                      {fmtCurrency(tasaMantenimientoAnual * costoUnitarioFab * factorH)}
+                    </>
+                  )}
                 </Typography>
               </div>
             </div>
@@ -600,7 +666,7 @@ export default function MakeBuyPage() {
           <div className="mb-6">
             <Typography type="h2">Resultados</Typography>
             <Typography className="mt-1" color="muted" type="body-sm">
-              Comparativa de costos y cantidades optimas con desglose de calculo
+              Comparativa de costos y cantidades optimas con desglose de calculo ({periodoLabel.toLowerCase()})
             </Typography>
           </div>
 
@@ -609,14 +675,15 @@ export default function MakeBuyPage() {
             <ResultadoCard
               CTA={result.proveedorExterno.CTA}
               Q_optima={result.proveedorExterno.Q_optima}
+              ctaLabel={`${costoCardLabel} &mdash; ${costoLabel}`}
               desglose_CTA={result.proveedorExterno.desglose_CTA}
-              desglose_D_anual={result.proveedorExterno.desglose_D_anual}
+              desglose_D={result.proveedorExterno.desglose_D}
               desglose_H={result.proveedorExterno.desglose_H}
               desglose_Q={result.proveedorExterno.desglose_Q}
               esGanador={result.totales.recomendacion === "comprar"}
               icono={ShoppingCart}
-              operacionesPorMes={result.proveedorExterno.pedidos_por_mes}
-              opsLabel="Pedidos por Mes"
+              operacionesPorPeriodo={result.proveedorExterno.pedidos_por_periodo}
+              opsLabel={opsLabelExt}
               qLabel="Q optima &mdash; Lote de Compra"
               subtitulo="Modelo EOQ"
               titulo="Proveedor Externo"
@@ -624,15 +691,16 @@ export default function MakeBuyPage() {
             <ResultadoCard
               CTA={result.produccionInterna.CTA}
               Q_optima={result.produccionInterna.Q_optima}
+              ctaLabel={`${costoCardLabel} &mdash; ${costoLabel}`}
               desglose_CTA={result.produccionInterna.desglose_CTA}
-              desglose_D_anual={result.produccionInterna.desglose_D_anual}
+              desglose_D={result.produccionInterna.desglose_D}
               desglose_H={result.produccionInterna.desglose_H}
               desglose_Q={result.produccionInterna.desglose_Q}
               desglose_factor={result.produccionInterna.desglose_factor}
               esGanador={result.totales.recomendacion === "fabricar"}
               icono={Factory}
-              operacionesPorMes={result.produccionInterna.corridas_por_mes}
-              opsLabel="Corridas de Produccion por Mes"
+              operacionesPorPeriodo={result.produccionInterna.corridas_por_periodo}
+              opsLabel={opsLabelFab}
               qLabel="Q optima &mdash; Lote de Produccion"
               subtitulo="Modelo EPQ"
               titulo="Produccion Interna"
@@ -655,7 +723,7 @@ export default function MakeBuyPage() {
                     color="muted"
                     type="body-sm"
                   >
-                    Costo Total Global
+                    {costoGlobalLabel}
                   </Typography>
                   <Typography className="mt-1 text-2xl font-bold tabular-nums" type="body">
                     {fmtCurrency(result.totales.costo_global)}
@@ -684,7 +752,7 @@ export default function MakeBuyPage() {
                     color="muted"
                     type="body-sm"
                   >
-                    Ahorro Anual
+                    {ahorroLabel}
                   </Typography>
                   <Typography className="mt-1 text-lg font-semibold tabular-nums" type="body">
                     {fmtCurrency(result.totales.ahorro)}
@@ -701,9 +769,9 @@ export default function MakeBuyPage() {
                 <Typography className="text-xs" color="muted" type="body-sm">
                   <strong>EOQ:</strong> Cantidad Economica de Pedido para proveedor externo.{" "}
                   <strong>EPQ:</strong> Cantidad Economica de Produccion para fabricacion interna.{" "}
-                  La demanda mensual se anualiza (x12) para el calculo de Q y Costo Total.{" "}
+                  Al alternar entre Anual/Mensual, la demanda y H se ajustan proporcionalmente.{" "}
                   El factor (1 - d/p) en EPQ usa demanda mensual / capacidad mensual para consistencia temporal.{" "}
-                  H = i x costo unitario de cada opcion.
+                  Q optima es invariante al periodo seleccionado.
                 </Typography>
               </div>
             </Card.Content>

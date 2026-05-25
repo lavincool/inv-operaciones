@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import HeaderNavbar from "./(components)/HeaderNavbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,16 +13,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-const APP_NAME = "DiSalud";
-const APP_DEFAULT_TITLE = "DiSalud";
+const APP_NAME = "Inv. Operaciones";
+const APP_DEFAULT_TITLE = "Inv. Operaciones";
 const APP_TITLE_TEMPLATE = "%s";
 const APP_DESCRIPTION =
-  "Plataforma de gestión de salud para pacientes y profesionales médicos, que ofrece seguimiento de historial médico, recordatorios de medicamentos y comunicación segura entre pacientes y médicos.";
+  "Sistema de apoyo para la resolucion de problemas de Investigacion de Operaciones: modelos de inventarios y lineas de espera.";
 
 export const metadata: Metadata = {
   icons: {
-    //icon: "/icons/favicon.ico",
     shortcut: "/icons/128x128.png",
     apple: "/icons/128x128.png",
   },
@@ -35,7 +34,6 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: APP_DEFAULT_TITLE,
-    // startUpImage: [],
   },
   formatDetection: {
     telephone: false,
@@ -77,7 +75,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-MX"
+    <html
+      lang="es-MX"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <head>
@@ -86,7 +85,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <HeaderNavbar />
+        {children}
+      </body>
     </html>
   );
 }

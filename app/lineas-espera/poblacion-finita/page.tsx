@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useCallback } from "react";
 import {
-  Badge,
+  Chip,
   Button,
   Card,
   Label,
@@ -219,13 +219,13 @@ export default function PoblacionFinitaPage() {
                 <Typography className="text-xs" color="muted" type="body-sm">
                   Factor de utilizacion (&rho;):
                 </Typography>
-                <Badge
+                <Chip
                   color={rho >= 1 ? "danger" : rho >= 0.7 ? "warning" : "success"}
                   size="sm"
                   variant="soft"
                 >
                   &rho; = {formatDecimal(rho, 4)}
-                </Badge>
+                </Chip>
               </div>
             </div>
 
@@ -282,25 +282,24 @@ export default function PoblacionFinitaPage() {
           return (
             <Card
               key={scenario.s}
-              className={`transition-all duration-300 ${
-                isBest
+              className={`transition-all duration-300 ${isBest
                   ? "ring-2 ring-success/50 shadow-lg shadow-success/10"
                   : isWorst
                     ? "opacity-75"
                     : ""
-              }`}
+                }`}
               variant={isBest ? "tertiary" : "default"}
             >
               <Card.Header>
                 <div className="flex flex-wrap items-center gap-2 w-full justify-between">
-                  <Badge color={isBest ? "success" : "default"}>
+                  <Chip color={isBest ? "success" : "default"}>
                     {scenario.s} Servidor{scenario.s > 1 ? "es" : ""}
-                  </Badge>
+                  </Chip>
                   {isBest && (
-                    <Badge color="success" variant="primary">
+                    <Chip color="success" variant="primary">
                       <TrendingDown className="size-3 mr-1" />
                       Mejor Opcion
-                    </Badge>
+                    </Chip>
                   )}
                 </div>
               </Card.Header>

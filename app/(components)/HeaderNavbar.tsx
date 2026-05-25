@@ -101,79 +101,68 @@ export default function HeaderNavbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 h-14 flex items-center">
-        {/* Left: hamburger (mobile) */}
-        <div className="flex items-center flex-1 sm:flex-none gap-3">
-          <button
-            type="button"
-            className="sm:hidden p-1.5 -ml-1.5 rounded-lg hover:bg-default-100 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={isMenuOpen}
-          >
-            {isMenuOpen ? (
-              <X className="size-5" />
-            ) : (
-              <Menu className="size-5" />
-            )}
-          </button>
+        {/* Mobile hamburger */}
+        <button
+          type="button"
+          className="sm:hidden p-1.5 -ml-1.5 rounded-lg hover:bg-default-100 transition-colors shrink-0"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={isMenuOpen}
+        >
+          {isMenuOpen ? (
+            <X className="size-5" />
+          ) : (
+            <Menu className="size-5" />
+          )}
+        </button>
 
-          <Link
-            href="/"
-            className="navbar_brand hidden sm:block font-bold text-lg tracking-tight hover:opacity-80 transition-opacity shrink-0"
-            aria-label="Inv. Operaciones - Inicio"
-          >
-            Inv. Operaciones
-          </Link>
-        </div>
+        {/* Brand */}
+        <Link
+          href="/"
+          className="navbar_brand font-bold text-lg tracking-tight hover:opacity-80 transition-opacity shrink-0"
+          aria-label="Inv. Operaciones - Inicio"
+        >
+          Inv. Operaciones
+        </Link>
 
-        {/* Center: brand (mobile) + nav categories (desktop) */}
-        <div className="flex items-center justify-center flex-1">
-          <Link
-            href="/"
-            className="navbar_brand sm:hidden font-bold text-lg tracking-tight"
-            aria-label="Inv. Operaciones - Inicio"
-          >
-            Inv. Operaciones
-          </Link>
-
-          <div className="hidden sm:flex items-center gap-1 ml-8">
-            {NAV_CATEGORIES.map((cat) => (
-              <Dropdown key={cat.category}>
-                <DropdownTrigger
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 select-none outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                    cat.items.some((item) => isActive(item.path))
-                      ? "text-accent bg-accent/10"
-                      : "text-foreground/70 hover:text-foreground hover:bg-default-100"
-                  }`}
+        {/* Desktop nav dropdowns */}
+        <div className="hidden sm:flex items-center gap-1 ml-8">
+          {NAV_CATEGORIES.map((cat) => (
+            <Dropdown key={cat.category}>
+              <DropdownTrigger
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 select-none outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  cat.items.some((item) => isActive(item.path))
+                    ? "text-accent bg-accent/10"
+                    : "text-foreground/70 hover:text-foreground hover:bg-default-100"
+                }`}
+              >
+                <cat.icon className="size-4" />
+                <span>{cat.category}</span>
+                <ChevronDown className="size-3.5 opacity-60" />
+              </DropdownTrigger>
+              <DropdownPopover placement="bottom start" className="min-w-[220px]">
+                <DropdownMenu
+                  aria-label={cat.category}
+                  onAction={(key) => router.push(key as string)}
                 >
-                  <cat.icon className="size-4" />
-                  <span>{cat.category}</span>
-                  <ChevronDown className="size-3.5 opacity-60" />
-                </DropdownTrigger>
-                <DropdownPopover placement="bottom start" className="min-w-[220px]">
-                  <DropdownMenu
-                    aria-label={cat.category}
-                    onAction={(key) => router.push(key as string)}
-                  >
-                    {cat.items.map((item) => (
-                      <DropdownItem
-                        key={item.path}
-                        id={item.path}
-                        textValue={item.title}
-                        className={isActive(item.path) ? "text-accent" : ""}
-                      >
-                        {item.title}
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </DropdownPopover>
-              </Dropdown>
-            ))}
-          </div>
+                  {cat.items.map((item) => (
+                    <DropdownItem
+                      key={item.path}
+                      id={item.path}
+                      textValue={item.title}
+                      className={isActive(item.path) ? "text-accent" : ""}
+                    >
+                      {item.title}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </DropdownPopover>
+            </Dropdown>
+          ))}
         </div>
 
-        {/* Right: spacer for balance on desktop */}
-        <div className="flex-1 sm:flex-none" />
+        {/* Spacer for mobile brand centering symmetry */}
+        <div className="sm:hidden w-8 shrink-0" />
       </nav>
 
       {/* Mobile menu overlay + panel */}

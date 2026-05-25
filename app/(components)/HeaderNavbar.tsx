@@ -41,6 +41,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { title: "Modelo EOQ", path: "/inventarios/eoq" },
       { title: "Descuento por Cantidad", path: "/inventarios/descuento" },
       { title: "Periodo Único", path: "/inventarios/periodo-unico" },
+      { title: "Fabricar o Comprar", path: "/inventarios/make-buy" },
     ],
   },
   {

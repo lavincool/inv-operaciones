@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar } from "lucide-react";
+import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog } from "lucide-react";
 import { Card, Badge, Typography } from "@heroui/react";
 import Link from "next/link";
 
@@ -48,6 +48,13 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Modelo para productos de temporada o perecederos donde la decision se toma una sola vez.",
         icon: Calendar,
+      },
+      {
+        title: "Fabricar o Comprar",
+        path: "/inventarios/make-buy",
+        description:
+          "Compara comprar a proveedor externo (EOQ) contra fabricar internamente (EPQ) para minimizar costos.",
+        icon: Cog,
       },
     ],
   },

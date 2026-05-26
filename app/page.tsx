@@ -43,6 +43,13 @@ const CATEGORIES: CategorySection[] = [
         icon: AlertTriangle,
       },
       {
+        title: "EPQ (Lote de Produccion)",
+        path: "/inventarios/epq",
+        description:
+          "Modelo de Lote Economico de Produccion donde el inventario se repone gradualmente en lugar de instantaneamente.",
+        icon: Cog,
+      },
+      {
         title: "Modelo EOQ",
         path: "/inventarios/eoq",
         description:
@@ -53,8 +60,15 @@ const CATEGORIES: CategorySection[] = [
         title: "Descuento por Cantidad",
         path: "/inventarios/descuento",
         description:
-          "Evalua si conviene aceptar descuentos por volumen considerando el costo de mantener inventario.",
+          "Evalua multiples rangos de precios escalonados para encontrar la cantidad y el precio que minimizan el costo total.",
         icon: Percent,
+      },
+      {
+        title: "EOQ con Descuentos",
+        path: "/inventarios/eoq-descuentos",
+        description:
+          "Evalua si conviene aceptar un descuento del proveedor aumentando el tamano del pedido, comparando el Costo Total Anual.",
+        icon: TrendingUp,
       },
       {
         title: "Periodo Unico",

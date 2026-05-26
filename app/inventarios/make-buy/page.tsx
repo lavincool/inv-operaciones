@@ -674,7 +674,7 @@ export default function MakeBuyPage() {
             <ResultadoCard
               CTA={result.proveedorExterno.CTA}
               Q_optima={result.proveedorExterno.Q_optima}
-              ctaLabel={`${costoCardLabel} &mdash; ${costoLabel}`}
+              ctaLabel={`${costoCardLabel} — ${costoLabel}`}
               desglose_CTA={result.proveedorExterno.desglose_CTA}
               desglose_D={result.proveedorExterno.desglose_D}
               desglose_H={result.proveedorExterno.desglose_H}
@@ -683,14 +683,14 @@ export default function MakeBuyPage() {
               icono={ShoppingCart}
               operacionesPorPeriodo={result.proveedorExterno.pedidos_por_periodo}
               opsLabel={opsLabelExt}
-              qLabel="Q optima &mdash; Lote de Compra"
+              qLabel="Q optima — Lote de Compra"
               subtitulo="Modelo EOQ"
               titulo="Proveedor Externo"
             />
             <ResultadoCard
               CTA={result.produccionInterna.CTA}
               Q_optima={result.produccionInterna.Q_optima}
-              ctaLabel={`${costoCardLabel} &mdash; ${costoLabel}`}
+              ctaLabel={`${costoCardLabel} — ${costoLabel}`}
               desglose_CTA={result.produccionInterna.desglose_CTA}
               desglose_D={result.produccionInterna.desglose_D}
               desglose_H={result.produccionInterna.desglose_H}
@@ -700,7 +700,7 @@ export default function MakeBuyPage() {
               icono={Factory}
               operacionesPorPeriodo={result.produccionInterna.corridas_por_periodo}
               opsLabel={opsLabelFab}
-              qLabel="Q optima &mdash; Lote de Produccion"
+              qLabel="Q optima — Lote de Produccion"
               subtitulo="Modelo EPQ"
               titulo="Produccion Interna"
             />

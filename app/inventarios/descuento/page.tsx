@@ -294,7 +294,7 @@ export default function DescuentoPage() {
                   label="S &mdash; Costo de Pedido"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoPedido}
                   onChange={setCostoPedido}
                 />
@@ -425,7 +425,7 @@ export default function DescuentoPage() {
                         formatOptions={CURRENCY_FMT}
                         minValue={0}
                         name={`precio-${index}`}
-                        step={0.5}
+                        step={0.01}
                         value={rango.precioUnitario}
                         onChange={(v) => updateRango(index, { precioUnitario: v ?? 0.01 })}
                       >

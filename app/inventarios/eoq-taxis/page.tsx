@@ -419,7 +419,7 @@ export default function EOQTaxisPage() {
                   label="s &mdash; Costo de Orden"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoOrden}
                   onChange={setCostoOrden}
                 />

@@ -357,7 +357,7 @@ export default function EPQPage() {
                   label="S &mdash; Costo de Preparacion"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoPreparacion}
                   onChange={setCostoPreparacion}
                 />
@@ -366,7 +366,7 @@ export default function EPQPage() {
                   label="H &mdash; Costo de Mantenimiento"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoMantenimiento}
                   onChange={setCostoMantenimiento}
                 />

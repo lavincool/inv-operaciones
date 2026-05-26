@@ -380,7 +380,7 @@ export default function EOQDescuentosPage() {
                   label="S &mdash; Costo de Pedido"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoPedido}
                   onChange={setCostoPedido}
                 />
@@ -413,7 +413,7 @@ export default function EOQDescuentosPage() {
                   label="C1 &mdash; Precio Normal"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={precioNormal}
                   onChange={setPrecioNormal}
                 />
@@ -422,7 +422,7 @@ export default function EOQDescuentosPage() {
                   label="C2 &mdash; Precio con Descuento"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={precioDescuento}
                   onChange={setPrecioDescuento}
                 />

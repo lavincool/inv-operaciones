@@ -346,7 +346,7 @@ export default function MMSvsMM1Page() {
                   label="&lambda; &mdash; Tasa de Llegada (clientes/hora)"
                   maxValue={1000}
                   minValue={0.001}
-                  step={1}
+                  step={0.01}
                   value={tasaLlegada}
                   onChange={setTasaLlegada}
                 />
@@ -354,7 +354,7 @@ export default function MMSvsMM1Page() {
                   label="&mu; &mdash; Tasa de Servicio (clientes/hora)"
                   maxValue={1000}
                   minValue={0.001}
-                  step={1}
+                  step={0.01}
                   value={tasaServicio}
                   onChange={setTasaServicio}
                 />

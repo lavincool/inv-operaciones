@@ -360,7 +360,7 @@ export default function EOQEscasezPage() {
                   label="S &mdash; Costo de Pedido"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoPedido}
                   onChange={setCostoPedido}
                 />
@@ -369,7 +369,7 @@ export default function EOQEscasezPage() {
                   label="H &mdash; Costo de Mantenimiento"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoMantenimiento}
                   onChange={setCostoMantenimiento}
                 />
@@ -378,7 +378,7 @@ export default function EOQEscasezPage() {
                   label="P &mdash; Costo de Escasez"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoEscasez}
                   onChange={setCostoEscasez}
                 />

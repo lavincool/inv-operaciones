@@ -293,7 +293,7 @@ export default function EOQBasicoPage() {
                   label="S &mdash; Costo de Pedido"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoPedido}
                   onChange={setCostoPedido}
                 />
@@ -302,7 +302,7 @@ export default function EOQBasicoPage() {
                   label="C &mdash; Costo Unitario"
                   maxValue={1000000}
                   minValue={0}
-                  step={1}
+                  step={0.01}
                   value={costoUnitario}
                   onChange={setCostoUnitario}
                 />

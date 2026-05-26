@@ -50,8 +50,11 @@ export interface EOQDescuentosOutput {
 //  UTILIDADES
 // ══════════════════════════════════════════════════════════════════════════════
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -197,19 +200,19 @@ export function calculateEOQDescuentos(input: EOQDescuentosInput): EOQDescuentos
 
   const convieneDescuento = CTA2 < CTA1;
   const decision = convieneDescuento
-    ? `Si conviene aceptar el descuento (${f4(CTA2)} < ${f4(CTA1)})`
-    : `No conviene aceptar el descuento (${f4(CTA1)} < ${f4(CTA2)})`;
+    ? `Si conviene aceptar el descuento (${fmt(CTA2)} < ${fmt(CTA1)})`
+    : `No conviene aceptar el descuento (${fmt(CTA1)} < ${fmt(CTA2)})`;
 
   // ─── Generacion de desgloses en LaTeX ─────────────────────────────────────
 
   const desgloseQ1 =
-    `Q^* = \\sqrt{\\frac{2 \\times D \\times S}{H_1}} = \\sqrt{\\frac{2 \\times ${demandaAnual.toFixed(0)} \\times ${f4(costoPedido)}}{${f4(H1)}}} = ${f4(Q1)}`;
+    `Q^* = \\sqrt{\\frac{2 \\times D \\times S}{H_1}} = \\sqrt{\\frac{2 \\times ${demandaAnual.toFixed(0)} \\times ${fmt(costoPedido)}}{${fmt(H1)}}} = ${fmt(Q1)}`;
 
   const desgloseCTA1 =
-    `CTA_1 = D \\cdot C_1 + \\frac{D}{Q^*} \\cdot S + \\frac{Q^*}{2} \\cdot H_1 = ${demandaAnual.toFixed(0)} \\cdot ${f4(precioNormal)} + \\frac{${demandaAnual.toFixed(0)}}{${f4(Q1)}} \\cdot ${f4(costoPedido)} + \\frac{${f4(Q1)}}{2} \\cdot ${f4(H1)} = ${f4(CTA1)}`;
+    `CTA_1 = D \\cdot C_1 + \\frac{D}{Q^*} \\cdot S + \\frac{Q^*}{2} \\cdot H_1 = ${demandaAnual.toFixed(0)} \\cdot ${fmt(precioNormal)} + \\frac{${demandaAnual.toFixed(0)}}{${fmt(Q1)}} \\cdot ${fmt(costoPedido)} + \\frac{${fmt(Q1)}}{2} \\cdot ${fmt(H1)} = ${fmt(CTA1)}`;
 
   const desgloseCTA2 =
-    `CTA_2 = D \\cdot C_2 + \\frac{D}{q_{\\text{min}}} \\cdot S + \\frac{q_{\\text{min}}}{2} \\cdot H_2 = ${demandaAnual.toFixed(0)} \\cdot ${f4(precioDescuento)} + \\frac{${demandaAnual.toFixed(0)}}{${f4(umbralDescuento)}} \\cdot ${f4(costoPedido)} + \\frac{${f4(umbralDescuento)}}{2} \\cdot ${f4(H2)} = ${f4(CTA2)}`;
+    `CTA_2 = D \\cdot C_2 + \\frac{D}{q_{\\text{min}}} \\cdot S + \\frac{q_{\\text{min}}}{2} \\cdot H_2 = ${demandaAnual.toFixed(0)} \\cdot ${fmt(precioDescuento)} + \\frac{${demandaAnual.toFixed(0)}}{${fmt(umbralDescuento)}} \\cdot ${fmt(costoPedido)} + \\frac{${fmt(umbralDescuento)}}{2} \\cdot ${fmt(H2)} = ${fmt(CTA2)}`;
 
   return {
     cantidadOptima1: Q1,

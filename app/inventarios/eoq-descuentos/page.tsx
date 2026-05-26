@@ -523,7 +523,7 @@ export default function EOQDescuentosPage() {
                   </div>
                   <div>
                     <Card.Title>Sin Descuento (CTA1)</Card.Title>
-                    <Card.Description>Q* = {fmtDecimal(result.cantidadOptima1, 4)} unid, precio normal</Card.Description>
+                    <Card.Description>Q* = {fmtDecimal(result.cantidadOptima1, 2)} unid, precio normal</Card.Description>
                   </div>
                 </div>
               </Card.Header>
@@ -578,7 +578,7 @@ export default function EOQDescuentosPage() {
               </Card.Header>
               <Card.Content>
                 <Typography className="text-xl font-bold tabular-nums" type="body">
-                  {fmtDecimal(result.cantidadOptima1, 4)} unid
+                  {fmtDecimal(result.cantidadOptima1, 2)} unid
                 </Typography>
               </Card.Content>
             </Card>

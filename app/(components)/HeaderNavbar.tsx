@@ -38,6 +38,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     category: "Inventarios",
     icon: Boxes,
     items: [
+      { title: "EOQ Basico (Sin escasez)", path: "/inventarios/eoq-basico" },
       { title: "Modelo EOQ", path: "/inventarios/eoq" },
       { title: "Descuento por Cantidad", path: "/inventarios/descuento" },
       { title: "Periodo Único", path: "/inventarios/periodo-unico" },

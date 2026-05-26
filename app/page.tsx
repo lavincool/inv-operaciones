@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog } from "lucide-react";
+import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog, Gauge } from "lucide-react";
 import { Card, Badge, Typography } from "@heroui/react";
 import Link from "next/link";
 
@@ -28,6 +28,13 @@ const CATEGORIES: CategorySection[] = [
     icon: Boxes,
     color: "accent",
     modules: [
+      {
+        title: "EOQ Basico (Sin escasez)",
+        path: "/inventarios/eoq-basico",
+        description:
+          "Modelo EOQ clasico con Punto de Reorden Complejo para cuando el Lead Time supera el ciclo de inventario.",
+        icon: Gauge,
+      },
       {
         title: "Modelo EOQ",
         path: "/inventarios/eoq",

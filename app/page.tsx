@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog, Gauge } from "lucide-react";
+import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog, Gauge, AlertTriangle } from "lucide-react";
 import { Card, Badge, Typography } from "@heroui/react";
 import Link from "next/link";
 
@@ -34,6 +34,13 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Modelo EOQ clasico con Punto de Reorden Complejo para cuando el Lead Time supera el ciclo de inventario.",
         icon: Gauge,
+      },
+      {
+        title: "EOQ con Escasez",
+        path: "/inventarios/eoq-escasez",
+        description:
+          "Modelo EOQ que permite escasez (faltantes) controlada, minimizando costos de ordenar, mantener y penalizaciones por deficit.",
+        icon: AlertTriangle,
       },
       {
         title: "Modelo EOQ",

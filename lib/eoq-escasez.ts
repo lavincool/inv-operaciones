@@ -59,8 +59,11 @@ export interface EOQEscasezOutput {
 //  UTILIDADES
 // ══════════════════════════════════════════════════════════════════════════════
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -218,25 +221,25 @@ export function calculateEOQEscasez(input: EOQEscasezInput): EOQEscasezOutput {
   // ─── Generacion de desgloses en LaTeX ─────────────────────────────────────
 
   const desgloseQ =
-    `Q = \\sqrt{\\frac{2 \\times D \\times S \\times (H + P)}{H \\times P}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S} \\times (${H} + ${P})}{${H} \\times ${P}}} = ${f4(Q)}`;
+    `Q = \\sqrt{\\frac{2 \\times D \\times S \\times (H + P)}{H \\times P}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S} \\times (${H} + ${P})}{${H} \\times ${P}}} = ${fmt(Q)}`;
 
   const desgloseSmax =
-    `S_{\\text{max}} = Q \\times \\frac{P}{H + P} = ${f4(Q)} \\times \\frac{${P}}{${H} + ${P}} = ${f4(S_max)}`;
+    `S_{\\text{max}} = Q \\times \\frac{P}{H + P} = ${fmt(Q)} \\times \\frac{${P}}{${H} + ${P}} = ${fmt(S_max)}`;
 
   const desgloseW =
-    `W = Q \\times \\frac{H}{H + P} = ${f4(Q)} \\times \\frac{${H}}{${H} + ${P}} = ${f4(W)}`;
+    `W = Q \\times \\frac{H}{H + P} = ${fmt(Q)} \\times \\frac{${H}}{${H} + ${P}} = ${fmt(W)}`;
 
   const desgloseCTA =
-    `CTA = \\sqrt{\\frac{2 \\times D \\times S \\times H \\times P}{H + P}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S} \\times ${H} \\times ${P}}{${H} + ${P}}} = ${f4(CTA)}`;
+    `CTA = \\sqrt{\\frac{2 \\times D \\times S \\times H \\times P}{H + P}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S} \\times ${H} \\times ${P}}{${H} + ${P}}} = ${fmt(CTA)}`;
 
   const desgloseN =
-    `N = \\frac{D}{Q} = \\frac{${D}}{${f4(Q)}} = ${f4(N)}`;
+    `N = \\frac{D}{Q} = \\frac{${D}}{${fmt(Q)}} = ${fmt(N)}`;
 
   const desgloseT =
-    `T = \\frac{Q}{D} = \\frac{${f4(Q)}}{${D}} = ${f4(T)} \\ \\text{años}`;
+    `T = \\frac{Q}{D} = \\frac{${fmt(Q)}}{${D}} = ${fmt(T)} \\ \\text{años}`;
 
   const desgloseTdias =
-    `T_{\\text{dias}} = T \\times L = ${f4(T)} \\times ${L} = ${f4(T_dias)} \\ \\text{días}`;
+    `T_{\\text{dias}} = T \\times L = ${fmt(T)} \\times ${L} = ${fmt(T_dias)} \\ \\text{días}`;
 
   return {
     cantidadOptima: Q,

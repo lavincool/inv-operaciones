@@ -47,8 +47,11 @@ export interface EOQBasicoOutput {
 //  VALIDACIONES
 // ══════════════════════════════════════════════════════════════════════════════
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -307,23 +310,23 @@ export function calculateEOQBasico(input: EOQBasicoInput): EOQBasicoOutput {
 
   // Desglose de Q: Q = √(2DS / H)
   const desgloseQ =
-    `Q = \\sqrt{\\frac{2 \\times D \\times S}{H}} = \\sqrt{\\frac{2 \\times ${demandaAnual.toFixed(0)} \\times ${f4(costoPedido)}}{${f4(H)}}} = ${f4(Q)}`;
+    `Q = \\sqrt{\\frac{2 \\times D \\times S}{H}} = \\sqrt{\\frac{2 \\times ${demandaAnual.toFixed(0)} \\times ${fmt(costoPedido)}}{${fmt(H)}}} = ${fmt(Q)}`;
 
   // Desglose de N: N = D / Q
   const desgloseN =
-    `N = \\frac{D}{Q} = \\frac{${demandaAnual.toFixed(0)}}{${f4(Q)}} = ${f4(N)}`;
+    `N = \\frac{D}{Q} = \\frac{${demandaAnual.toFixed(0)}}{${fmt(Q)}} = ${fmt(N)}`;
 
   // Desglose de CTA: CTA = (D/Q)×S + (Q/2)×H
   const desgloseCTA =
-    `CTA = \\left(\\frac{D}{Q}\\right) \\times S + \\left(\\frac{Q}{2}\\right) \\times H = \\left(\\frac{${demandaAnual.toFixed(0)}}{${f4(Q)}}\\right)(${f4(costoPedido)}) + \\left(\\frac{${f4(Q)}}{2}\\right)(${f4(H)}) = ${f4(CTA)}`;
+    `CTA = \\left(\\frac{D}{Q}\\right) \\times S + \\left(\\frac{Q}{2}\\right) \\times H = \\left(\\frac{${demandaAnual.toFixed(0)}}{${fmt(Q)}}\\right)(${fmt(costoPedido)}) + \\left(\\frac{${fmt(Q)}}{2}\\right)(${fmt(H)}) = ${fmt(CTA)}`;
 
   // Desglose de PR (Punto de Reorden — 5 pasos)
   const desglosePR =
-    `d_{\\text{sem}} = \\frac{D}{52} = \\frac{${demandaAnual.toFixed(0)}}{52} = ${f4(d_sem)}\\\\` +
-    `t = \\frac{Q}{d_{\\text{sem}}} = \\frac{${f4(Q)}}{${f4(d_sem)}} = ${f4(t)}\\\\` +
-    `n = \\left\\lfloor\\frac{L}{t}\\right\\rfloor = \\left\\lfloor\\frac{${f4(tiempoEntrega)}}{${f4(t)}}\\right\\rfloor = ${n}\\\\` +
-    `L_{\\text{efectivo}} = L - (n \\times t) = ${f4(tiempoEntrega)} - (${n} \\times ${f4(t)}) = ${f4(L_efectivo)}\\\\` +
-    `PR = d_{\\text{sem}} \\times L_{\\text{efectivo}} = ${f4(d_sem)} \\times ${f4(L_efectivo)} = ${f4(PR)}`;
+    `d_{\\text{sem}} = \\frac{D}{52} = \\frac{${demandaAnual.toFixed(0)}}{52} = ${fmt(d_sem)}\\\\` +
+    `t = \\frac{Q}{d_{\\text{sem}}} = \\frac{${fmt(Q)}}{${fmt(d_sem)}} = ${fmt(t)}\\\\` +
+    `n = \\left\\lfloor\\frac{L}{t}\\right\\rfloor = \\left\\lfloor\\frac{${fmt(tiempoEntrega)}}{${fmt(t)}}\\right\\rfloor = ${n}\\\\` +
+    `L_{\\text{efectivo}} = L - (n \\times t) = ${fmt(tiempoEntrega)} - (${n} \\times ${fmt(t)}) = ${fmt(L_efectivo)}\\\\` +
+    `PR = d_{\\text{sem}} \\times L_{\\text{efectivo}} = ${fmt(d_sem)} \\times ${fmt(L_efectivo)} = ${fmt(PR)}`;
 
   return {
     cantidadOptima: Q,

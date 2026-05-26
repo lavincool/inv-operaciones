@@ -64,7 +64,7 @@ function fmtCurrency(value: number): string {
 
 function fmtDecimal(value: number, decimals = 2): string {
   return value.toLocaleString("es-MX", {
-    minimumFractionDigits: decimals,
+    minimumFractionDigits: 0,
     maximumFractionDigits: decimals,
   });
 }

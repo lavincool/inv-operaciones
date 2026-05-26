@@ -46,8 +46,11 @@ export interface EPQOutput {
 //  UTILIDADES
 // ══════════════════════════════════════════════════════════════════════════════
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -198,16 +201,16 @@ export function calculateEPQ(input: EPQInput): EPQOutput {
   const factorProduccion = 1 - D / P;
 
   const desgloseQ =
-    `Q = \\sqrt{\\frac{2 \\times D \\times S}{H \\times (1 - D / P)}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S}}{${H} \\times (1 - ${D} / ${P})}} = \\sqrt{\\frac{${2 * D * S}}{${H} \\times ${f4(factorProduccion)}}} = ${f4(Q)}`;
+    `Q = \\sqrt{\\frac{2 \\times D \\times S}{H \\times (1 - D / P)}} = \\sqrt{\\frac{2 \\times ${D} \\times ${S}}{${H} \\times (1 - ${D} / ${P})}} = \\sqrt{\\frac{${2 * D * S}}{${H} \\times ${fmt(factorProduccion)}}} = ${fmt(Q)}`;
 
   const desgloseN =
-    `N = \\frac{D}{Q} = \\frac{${D}}{${f4(Q)}} = ${f4(N)}`;
+    `N = \\frac{D}{Q} = \\frac{${D}}{${fmt(Q)}} = ${fmt(N)}`;
 
   const desgloseT =
-    `T = \\frac{L}{N} = \\frac{${L}}{${f4(N)}} = ${f4(T)} \\ \\text{días}`;
+    `T = \\frac{L}{N} = \\frac{${L}}{${fmt(N)}} = ${fmt(T)} \\ \\text{días}`;
 
   const desgloseCTA =
-    `CTA = \\left(\\frac{D}{Q}\\right) \\times S + \\left(\\frac{Q}{2}\\right) \\times \\left(1 - \\frac{D}{P}\\right) \\times H = \\left(\\frac{${D}}{${f4(Q)}}\\right)(${S}) + \\left(\\frac{${f4(Q)}}{2}\\right)(${f4(factorProduccion)})(${H}) = ${f4(CTA)}`;
+    `CTA = \\left(\\frac{D}{Q}\\right) \\times S + \\left(\\frac{Q}{2}\\right) \\times \\left(1 - \\frac{D}{P}\\right) \\times H = \\left(\\frac{${D}}{${fmt(Q)}}\\right)(${S}) + \\left(\\frac{${fmt(Q)}}{2}\\right)(${fmt(factorProduccion)})(${H}) = ${fmt(CTA)}`;
 
   return {
     loteOptimo: Q,

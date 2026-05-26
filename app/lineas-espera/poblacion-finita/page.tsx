@@ -36,7 +36,7 @@ function formatCurrency(value: number): string {
 
 function formatDecimal(value: number, decimals = 4): string {
   return value.toLocaleString("es-MX", {
-    minimumFractionDigits: decimals,
+    minimumFractionDigits: 0,
     maximumFractionDigits: decimals,
   });
 }

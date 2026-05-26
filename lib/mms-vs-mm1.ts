@@ -25,8 +25,11 @@ export interface MMSvsMM1Output {
   desgloses: MMSvsMM1Desgloses;
 }
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 function factorial(n: number): number {
@@ -59,7 +62,7 @@ export function calculateMMSvsMM1(input: MMSvsMM1Input): MMSvsMM1Output {
 
   if (rho >= 1) {
     throw new Error(
-      `El sistema no es estable. El factor de utilizacion (ρ = ${f4(rho)}) debe ser menor a 1. ` +
+      `El sistema no es estable. El factor de utilizacion (ρ = ${fmt(rho)}) debe ser menor a 1. ` +
       `Aumente la tasa de servicio, reduzca la tasa de llegada o incremente el numero de servidores.`,
     );
   }
@@ -86,8 +89,8 @@ export function calculateMMSvsMM1(input: MMSvsMM1Input): MMSvsMM1Output {
 
   if (lambdaI >= mu) {
     throw new Error(
-      `El sistema M/M/1 dividido no es estable. La tasa de llegada por servidor (${f4(lambdaI)}) ` +
-      `debe ser menor a la tasa de servicio (${f4(mu)}).`,
+      `El sistema M/M/1 dividido no es estable. La tasa de llegada por servidor (${fmt(lambdaI)}) ` +
+      `debe ser menor a la tasa de servicio (${fmt(mu)}).`,
     );
   }
 
@@ -101,40 +104,40 @@ export function calculateMMSvsMM1(input: MMSvsMM1Input): MMSvsMM1Output {
   // Build desgloses LaTeX strings
 
   const desgloseRho =
-    `\\rho = \\frac{\\lambda}{s \\cdot \\mu} = \\frac{${lambda}}{${s} \\cdot ${mu}} = ${f4(rho)}`;
+    `\\rho = \\frac{\\lambda}{s \\cdot \\mu} = \\frac{${lambda}}{${s} \\cdot ${mu}} = ${fmt(rho)}`;
 
   // Build P0 desglose
   let sumTerms = "";
   for (let n = 0; n <= s - 1; n++) {
     const term = Math.pow(lambdaOverMu, n) / factorial(n);
     if (n === 0) {
-      sumTerms += `${f4(term)}`;
+      sumTerms += `${fmt(term)}`;
     } else if (n === 1) {
-      sumTerms += ` + \\frac{${f4(lambdaOverMu)}}{1!}`;
+      sumTerms += ` + \\frac{${fmt(lambdaOverMu)}}{1!}`;
     } else {
-      sumTerms += ` + \\frac{(${f4(lambdaOverMu)})^{${n}}}{${n}!}`;
+      sumTerms += ` + \\frac{(${fmt(lambdaOverMu)})^{${n}}}{${n}!}`;
     }
   }
 
   const lastTermStr =
-    `\\frac{(${f4(lambdaOverMu)})^{${s}}}{${s}!(1-${f4(rho)})}`;
+    `\\frac{(${fmt(lambdaOverMu)})^{${s}}}{${s}!(1-${fmt(rho)})}`;
 
   const desgloseP0 =
     `P_0 = \\left[ \\sum_{n=0}^{${s - 1}} \\frac{(\\lambda/\\mu)^n}{n!} + \\frac{(\\lambda/\\mu)^{${s}}}{${s}!(1-\\rho)} \\right]^{-1} \\\\` +
     `P_0 = \\left[ ${sumTerms} + ${lastTermStr} \\right]^{-1} \\\\` +
-    `P_0 = \\left[ ${f4(sum + lastTerm)} \\right]^{-1} = ${f4(P0)}`;
+    `P_0 = \\left[ ${fmt(sum + lastTerm)} \\right]^{-1} = ${fmt(P0)}`;
 
   const desgloseLq =
-    `L_q = \\frac{P_0 (\\lambda/\\mu)^{${s}} \\rho}{${s}! (1-\\rho)^2} = \\frac{${f4(P0)} \\cdot (${f4(lambdaOverMu)})^{${s}} \\cdot ${f4(rho)}}{${s}! \\cdot (${f4(1 - rho)})^2} = ${f4(Lq)}`;
+    `L_q = \\frac{P_0 (\\lambda/\\mu)^{${s}} \\rho}{${s}! (1-\\rho)^2} = \\frac{${fmt(P0)} \\cdot (${fmt(lambdaOverMu)})^{${s}} \\cdot ${fmt(rho)}}{${s}! \\cdot (${fmt(1 - rho)})^2} = ${fmt(Lq)}`;
 
   const desgloseWqUnico =
-    `W_q^{(M/M/s)} = \\frac{L_q}{\\lambda} = \\frac{${f4(Lq)}}{${lambda}} = ${f4(WqUnico)} \\text{ horas} = ${f4(WqUnicoMinutos)} \\text{ minutos}`;
+    `W_q^{(M/M/s)} = \\frac{L_q}{\\lambda} = \\frac{${fmt(Lq)}}{${lambda}} = ${fmt(WqUnico)} \\text{ horas} = ${fmt(WqUnicoMinutos)} \\text{ minutos}`;
 
   const desgloseLambdaI =
-    `\\lambda_i = \\frac{\\lambda}{s} = \\frac{${lambda}}{${s}} = ${f4(lambdaI)}`;
+    `\\lambda_i = \\frac{\\lambda}{s} = \\frac{${lambda}}{${s}} = ${fmt(lambdaI)}`;
 
   const desgloseWqSeparado =
-    `W_q^{(M/M/1)} = \\frac{\\lambda_i}{\\mu(\\mu - \\lambda_i)} = \\frac{${f4(lambdaI)}}{${mu}(${mu} - ${f4(lambdaI)})} = ${f4(WqSeparado)} \\text{ horas} = ${f4(WqSeparadoMinutos)} \\text{ minutos}`;
+    `W_q^{(M/M/1)} = \\frac{\\lambda_i}{\\mu(\\mu - \\lambda_i)} = \\frac{${fmt(lambdaI)}}{${mu}(${mu} - ${fmt(lambdaI)})} = ${fmt(WqSeparado)} \\text{ horas} = ${fmt(WqSeparadoMinutos)} \\text{ minutos}`;
 
   return {
     utilizacion: rho,

@@ -59,8 +59,11 @@ export interface EOQTaxisOutput {
 //  VALIDACIONES
 // ══════════════════════════════════════════════════════════════════════════════
 
-function f4(value: number): string {
-  return value.toFixed(4);
+function fmt(value: number, decimals = 4): string {
+  return value
+    .toFixed(decimals)
+    .replace(/\.?0+$/, "")
+    .replace(/\.$/, "");
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -262,22 +265,22 @@ export function calculateEOQTaxis(input: EOQTaxisInput): EOQTaxisOutput {
 
   if (hayEscasez) {
     const desgloseQ =
-      `Q = \\sqrt{\\frac{2 \\times d \\times s \\times (h + p)}{h \\times p}} = \\sqrt{\\frac{2 \\times ${demandaMensual.toFixed(0)} \\times ${f4(costoOrden)} \\times (${f4(hEfectivo)} + ${f4(costoEscasez)})}{${f4(hEfectivo)} \\times ${f4(costoEscasez)}}} = ${f4(Q)}`;
+      `Q = \\sqrt{\\frac{2 \\times d \\times s \\times (h + p)}{h \\times p}} = \\sqrt{\\frac{2 \\times ${demandaMensual.toFixed(0)} \\times ${fmt(costoOrden)} \\times (${fmt(hEfectivo)} + ${fmt(costoEscasez)})}{${fmt(hEfectivo)} \\times ${fmt(costoEscasez)}}} = ${fmt(Q)}`;
 
     const desgloseSm =
-      `S_m = Q \\times \\left(\\frac{p}{h + p}\\right) = ${f4(Q)} \\times \\left(\\frac{${f4(costoEscasez)}}{${f4(hEfectivo)} + ${f4(costoEscasez)}}\\right) = ${f4(Sm!)}`;
+      `S_m = Q \\times \\left(\\frac{p}{h + p}\\right) = ${fmt(Q)} \\times \\left(\\frac{${fmt(costoEscasez)}}{${fmt(hEfectivo)} + ${fmt(costoEscasez)}}\\right) = ${fmt(Sm!)}`;
 
     const desgloseW =
-      `w = Q \\times \\left(\\frac{h}{h + p}\\right) = ${f4(Q)} \\times \\left(\\frac{${f4(hEfectivo)}}{${f4(hEfectivo)} + ${f4(costoEscasez)}}\\right) = ${f4(w!)}`;
+      `w = Q \\times \\left(\\frac{h}{h + p}\\right) = ${fmt(Q)} \\times \\left(\\frac{${fmt(hEfectivo)}}{${fmt(hEfectivo)} + ${fmt(costoEscasez)}}\\right) = ${fmt(w!)}`;
 
     const desgloseT =
-      `t = \\frac{Q}{d} = \\frac{${f4(Q)}}{${demandaMensual.toFixed(0)}} = ${f4(t)}`;
+      `t = \\frac{Q}{d} = \\frac{${fmt(Q)}}{${demandaMensual.toFixed(0)}} = ${fmt(t)}`;
 
     const desgloseT1 =
-      `t_1 = \\frac{S_m}{d} = \\frac{${f4(Sm!)}}{${demandaMensual.toFixed(0)}} = ${f4(t1!)}`;
+      `t_1 = \\frac{S_m}{d} = \\frac{${fmt(Sm!)}}{${demandaMensual.toFixed(0)}} = ${fmt(t1!)}`;
 
     const desgloseT2 =
-      `t_2 = \\frac{w}{d} = \\frac{${f4(w!)}}{${demandaMensual.toFixed(0)}} = ${f4(t2!)}`;
+      `t_2 = \\frac{w}{d} = \\frac{${fmt(w!)}}{${demandaMensual.toFixed(0)}} = ${fmt(t2!)}`;
 
     return {
       cantidadOptima: Q,
@@ -302,10 +305,10 @@ export function calculateEOQTaxis(input: EOQTaxisInput): EOQTaxisOutput {
   // ─── Escenario sin escasez ────────────────────────────────────────────────
 
   const desgloseQ =
-    `Q = \\sqrt{\\frac{2 \\times d \\times s}{h}} = \\sqrt{\\frac{2 \\times ${demandaMensual.toFixed(0)} \\times ${f4(costoOrden)}}{${f4(hEfectivo)}}} = ${f4(Q)}`;
+    `Q = \\sqrt{\\frac{2 \\times d \\times s}{h}} = \\sqrt{\\frac{2 \\times ${demandaMensual.toFixed(0)} \\times ${fmt(costoOrden)}}{${fmt(hEfectivo)}}} = ${fmt(Q)}`;
 
   const desgloseT =
-    `t = \\frac{Q}{d} = \\frac{${f4(Q)}}{${demandaMensual.toFixed(0)}} = ${f4(t)}`;
+    `t = \\frac{Q}{d} = \\frac{${fmt(Q)}}{${demandaMensual.toFixed(0)}} = ${fmt(t)}`;
 
   return {
     cantidadOptima: Q,

@@ -17,22 +17,22 @@ export interface EOQEscasezDesgloses {
   CTA: string;
   /** Desglose LaTeX del calculo de N (Numero de Pedidos) */
   N: string;
-  /** Desglose LaTeX del calculo de T (Tiempo entre Ordenes en anos) */
+  /** Desglose LaTeX del cálculo de T (Tiempo entre Órdenes en años) */
   T: string;
   /** Desglose LaTeX del calculo de T_dias (Tiempo entre Ordenes en dias) */
   T_dias: string;
 }
 
 export interface EOQEscasezInput {
-  /** Demanda anual del producto (unidades/ano) */
+  /** Demanda anual del producto (unidades/año) */
   demandaAnual: number;
   /** Costo por colocar una orden de pedido (moneda/orden) */
   costoPedido: number;
-  /** Costo de mantener una unidad en inventario por ano (moneda/unid-ano) */
+  /** Costo de mantener una unidad en inventario por año (moneda/unid-año) */
   costoMantenimiento: number;
-  /** Costo por carecer/faltante de una unidad por ano (moneda/unid-ano) */
+  /** Costo por carecer/faltante de una unidad por año (moneda/unid-año) */
   costoEscasez: number;
-  /** Dias laborables al ano (por defecto 300) */
+  /** Días laborables al año (por defecto 300) */
   diasLaborables: number;
 }
 
@@ -45,9 +45,9 @@ export interface EOQEscasezOutput {
   escasezMaxima: number;
   /** Costo total asociado a la politica (CTA) */
   costoTotal: number;
-  /** Numero de pedidos al ano (N) */
+  /** Número de pedidos al año (N) */
   numeroPedidos: number;
-  /** Tiempo entre ordenes en anos (T) */
+  /** Tiempo entre órdenes en años (T) */
   tiempoEntreOrdenes: number;
   /** Tiempo entre ordenes en dias (T_dias) */
   tiempoEntreOrdenesDias: number;
@@ -76,10 +76,10 @@ function f4(value: number): string {
  *        ╲╱          H × P
  *
  * Donde:
- *   D = Demanda anual (unidades/ano)
+ *   D = Demanda anual (unidades/año)
  *   S = Costo por colocar un pedido (moneda/orden)
- *   H = Costo anual de mantener una unidad (moneda/unid-ano)
- *   P = Costo anual por escasez de una unidad (moneda/unid-ano)
+ *   H = Costo anual de mantener una unidad (moneda/unid-año)
+ *   P = Costo anual por escasez de una unidad (moneda/unid-año)
  */
 function cantidadOptimaPedidoEscasez(
   demandaAnual: number,

@@ -17,22 +17,22 @@ export interface EPQDesgloses {
 }
 
 export interface EPQInput {
-  /** Demanda anual del producto (unidades/ano) */
+  /** Demanda anual del producto (unidades/año) */
   demandaAnual: number;
   /** Costo por preparacion o corrida de produccion (moneda/corrida) */
   costoPreparacion: number;
-  /** Costo de mantener una unidad en inventario por ano (moneda/unid-ano) */
+  /** Costo de mantener una unidad en inventario por año (moneda/unid-año) */
   costoMantenimiento: number;
-  /** Tasa anual de produccion (unidades/ano) */
+  /** Tasa anual de producción (unidades/año) */
   tasaProduccion: number;
-  /** Dias laborables por ano */
+  /** Días laborables por año */
   diasHabiles: number;
 }
 
 export interface EPQOutput {
   /** Cantidad optima a producir en cada corrida (Q) */
   loteOptimo: number;
-  /** Numero de corridas de produccion al ano (N) */
+  /** Número de corridas de producción al año (N) */
   frecuencia: number;
   /** Tiempo entre corridas en dias (T) */
   tiempoCorridas: number;
@@ -63,10 +63,10 @@ function f4(value: number): string {
  *        ╲╱      H × (1 − D / P)
  *
  * Donde:
- *   D = Demanda anual (unidades/ano)
+ *   D = Demanda anual (unidades/año)
  *   S = Costo de preparacion por corrida (moneda/corrida)
- *   H = Costo anual de mantener una unidad (moneda/unid-ano)
- *   P = Tasa anual de produccion (unidades/ano)
+ *   H = Costo anual de mantener una unidad (moneda/unid-año)
+ *   P = Tasa anual de producción (unidades/año)
  *
  * Requiere que P > D (tasa de produccion mayor que la demanda).
  */
@@ -105,7 +105,7 @@ function frecuenciaCorridas(demandaAnual: number, qOptima: number): number {
  *          N
  *
  * Donde:
- *   L = Dias laborables al ano
+ *   L = Días laborables al año
  *   N = Frecuencia de corridas
  *
  * Este es el tiempo que transcurre entre el inicio de una corrida y la

@@ -465,7 +465,7 @@ export default function EPQPage() {
                   </div>
                   <div>
                     <Card.Title>Frecuencia de Corridas (N)</Card.Title>
-                    <Card.Description>Corridas de produccion al ano</Card.Description>
+                    <Card.Description>Corridas de producción al año</Card.Description>
                   </div>
                 </div>
               </Card.Header>
@@ -532,7 +532,7 @@ export default function EPQPage() {
                 <Typography className="text-xs" color="muted" type="body-sm">
                   <strong>Interpretacion:</strong> Se debe producir un lote de{" "}
                   <strong>{fmtDecimal(result.loteOptimo, 2)} unidades</strong> por corrida,{" "}
-                  realizando <strong>{fmtDecimal(result.frecuencia, 2)} corridas</strong> al ano,{" "}
+                  realizando <strong>{fmtDecimal(result.frecuencia, 2)} corridas</strong> al año,{" "}
                   con un intervalo de{" "}
                   <strong>{fmtDecimal(result.tiempoCorridas, 2)} dias</strong> entre cada una.{" "}
                   El costo total anual de esta politica es{" "}
@@ -563,7 +563,7 @@ export default function EPQPage() {
             <Modal.Header>
               <Modal.Heading>Ejemplo de Ejercicio Resuelto</Modal.Heading>
               <p className="text-sm text-muted">
-                Compania Sunrise — Fabricacion interna de refacciones
+                Compañía Sunrise — Fabricacion interna de refacciones
               </p>
             </Modal.Header>
             <Modal.Body>
@@ -578,16 +578,16 @@ export default function EPQPage() {
                     Enunciado
                   </Typography>
                   <Typography className="text-sm leading-relaxed" type="body">
-                    La compania Sunrise ha decidido comenzar a fabricar una refaccion que antes
+                    La compañía Sunrise ha decidido comenzar a fabricar una refaccion que antes
                     adquiria de un proveedor externo. La demanda es de{" "}
                     <strong className="text-accent">1,000 unidades al mes</strong>, el costo de
                     preparacion por corrida es{" "}
                     <strong className="text-accent">$20</strong> y el costo de mantenimiento es{" "}
-                    <strong className="text-accent">$5 por unidad por ano</strong>. Una vez que
+                    <strong className="text-accent">$5 por unidad por año</strong>. Una vez que
                     una maquina esta operando, puede fabricar esas partes a razon de{" "}
                     <strong className="text-accent">2,500 unidades por mes</strong>. Por lo
-                    general, la compania opera aproximadamente{" "}
-                    <strong className="text-accent">300 dias habiles al ano</strong>. A los
+                    general, la compañía opera aproximadamente{" "}
+                    <strong className="text-accent">300 días hábiles al año</strong>. A los
                     administradores de la Sunrise les gustaria saber cual es el lote de produccion
                     con el que deben trabajar, con que frecuencia deben realizarse las corridas
                     y el costo total asociado.
@@ -604,11 +604,11 @@ export default function EPQPage() {
                     Datos del Problema
                   </Typography>
                   <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                    <div><strong>D</strong> = 12,000 unid/ano (1,000/mes)</div>
+                    <div><strong>D</strong> = 12,000 unid/año (1,000/mes)</div>
                     <div><strong>S</strong> = $20 / corrida</div>
-                    <div><strong>H</strong> = $5 / unid-ano</div>
-                    <div><strong>P</strong> = 30,000 unid/ano (2,500/mes)</div>
-                    <div><strong>L</strong> = 300 dias / ano</div>
+                    <div><strong>H</strong> = $5 / unid-año</div>
+                    <div><strong>P</strong> = 30,000 unid/año (2,500/mes)</div>
+                    <div><strong>L</strong> = 300 días / año</div>
                   </div>
                 </div>
 

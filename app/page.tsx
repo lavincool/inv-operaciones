@@ -74,7 +74,7 @@ const CATEGORIES: CategorySection[] = [
         title: "EOQ con Descuentos",
         path: "/inventarios/eoq-descuentos",
         description:
-          "Evalua si conviene aceptar un descuento del proveedor aumentando el tamano del pedido, comparando el Costo Total Anual.",
+          "Evalúa si conviene aceptar un descuento del proveedor aumentando el tamaño del pedido, comparando el Costo Total Anual.",
         icon: TrendingUp,
       },
       {

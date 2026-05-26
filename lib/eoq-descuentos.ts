@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════════════════════
 //  MODELO: EOQ CON DESCUENTOS POR CANTIDAD (Caso simple)
 //  ---------------------------------------------------------------------------
-//  Evalua si conviene aceptar un descuento del proveedor aumentando el tamano
+//  Evalúa si conviene aceptar un descuento del proveedor aumentando el tamaño
 //  del pedido. Compara el Costo Total Anual (incluyendo compra de material)
 //  entre la cantidad optima base (a precio normal) y el umbral minimo exigido
 //  (con precio con descuento).
@@ -17,7 +17,7 @@ export interface EOQDescuentosDesgloses {
 }
 
 export interface EOQDescuentosInput {
-  /** Demanda total durante un ano (unidades) */
+  /** Demanda total durante un año (unidades) */
   demandaAnual: number;
   /** Costo fijo por realizar una orden (moneda) */
   costoPedido: number;

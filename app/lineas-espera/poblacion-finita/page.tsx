@@ -160,7 +160,7 @@ export default function PoblacionFinitaPage() {
             <div>
               <Card.Title>Parametros del Modelo</Card.Title>
               <Card.Description>
-                Ajuste los valores para calcular los indicadores de desempeno
+                Ajuste los valores para calcular los indicadores de desempeño
               </Card.Description>
             </div>
             <Button

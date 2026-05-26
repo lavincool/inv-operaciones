@@ -328,7 +328,7 @@ export default function EOQBasicoPage() {
               {/* Preview de H */}
               <div className="mt-4 rounded-lg border border-default-200 bg-default-50 p-3">
                 <Typography className="text-xs" color="muted" type="body-sm">
-                  H = i x C = {fmtPercent(tasaMantenimiento)} x {fmtCurrency(costoUnitario)} = {fmtCurrency(H)} (Costo de mantener una unidad durante un ano)
+                  H = i x C = {fmtPercent(tasaMantenimiento)} x {fmtCurrency(costoUnitario)} = {fmtCurrency(H)} (Costo de mantener una unidad durante un año)
                 </Typography>
               </div>
             </div>
@@ -507,7 +507,7 @@ export default function EOQBasicoPage() {
                   </Typography>
                   <Typography className="text-sm leading-relaxed" type="body">
                     La demanda de escritorios para una fabrica de muebles para oficina es{" "}
-                    <strong className="text-accent">6000</strong> al ano en promedio. Cada vez que se
+                    <strong className="text-accent">6000</strong> al año en promedio. Cada vez que se
                     hace un pedido de escritorios se incurre en un costo de{" "}
                     <strong className="text-accent">$300</strong> dolares. El costo anual por tener en
                     inventario un solo escritorio es del <strong className="text-accent">25%</strong>{" "}
@@ -527,7 +527,7 @@ export default function EOQBasicoPage() {
                     Datos del Problema
                   </Typography>
                   <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                    <div><strong>D</strong> = 6000 unid/ano</div>
+                    <div><strong>D</strong> = 6000 unid/año</div>
                     <div><strong>S</strong> = $300 / pedido</div>
                     <div><strong>C</strong> = $200 / escritorio</div>
                     <div><strong>i</strong> = 25% = 0.25</div>
@@ -548,7 +548,7 @@ export default function EOQBasicoPage() {
                   </Typography>
                   <ol className="list-inside list-decimal space-y-1 text-sm">
                     <li>¿Cuantos escritorios se deben pedir cada vez que se hace un pedido?</li>
-                    <li>¿Cuantos pedidos se pueden colocar en un ano?</li>
+                    <li>¿Cuántos pedidos se pueden colocar en un año?</li>
                     <li>Calcule los costos totales anuales.</li>
                     <li>
                       Determine el punto de reorden. Si el tiempo de entrega fuera 5 semanas

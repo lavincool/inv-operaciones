@@ -51,9 +51,9 @@ interface ExampleInfo {
 const EXAMPLE_INFO: ExampleInfo[] = [
   {
     title: "Inciso a — EOQ Basico sin Faltantes",
-    subtitle: "Compania de taxis — Sin escasez permitida",
+    subtitle: "Compañía de taxis — Sin escasez permitida",
     enunciado:
-      "Una compania de taxis consume <strong class='text-accent'>8000 galones</strong> de gasolina al mes. El costo de colocar una orden es de <strong class='text-accent'>$1200</strong>. El costo de mantener un galon en inventario es de <strong class='text-accent'>$0.02</strong> por galon por mes. No se permiten faltantes.",
+      "Una compañía de taxis consume <strong class='text-accent'>8000 galones</strong> de gasolina al mes. El costo de colocar una orden es de <strong class='text-accent'>$1200</strong>. El costo de mantener un galon en inventario es de <strong class='text-accent'>$0.02</strong> por galon por mes. No se permiten faltantes.",
     datos: [
       "d = 8000 galones/mes",
       "s = $1,200 / orden",
@@ -63,7 +63,7 @@ const EXAMPLE_INFO: ExampleInfo[] = [
   },
   {
     title: "Inciso b — EOQ con Faltantes Permitidos",
-    subtitle: "Compania de taxis — Con escasez planeada",
+    subtitle: "Compañía de taxis — Con escasez planeada",
     enunciado:
       "Con los mismos datos del inciso anterior, ahora se <strong class='text-accent'>permiten faltantes</strong> con un costo de <strong class='text-accent'>$0.70</strong> por galon por mes. Determine la cantidad optima de pedido, el inventario maximo, el agotamiento maximo y los tiempos del ciclo.",
     datos: [
@@ -75,7 +75,7 @@ const EXAMPLE_INFO: ExampleInfo[] = [
   },
   {
     title: "Parte 2 — EOQ con Descuento por Volumen",
-    subtitle: "Compania de taxis — Cambio en costo de mantener",
+    subtitle: "Compañía de taxis — Cambio en costo de mantener",
     enunciado:
       "El precio por galon baja a <strong class='text-accent'>$0.80</strong>. El costo de mantener cambia proporcionalmente, resultando en un nuevo costo de mantener de <strong class='text-accent'>h = $0.016</strong> por galon por mes. Sin faltantes permitidos. Determine la nueva cantidad optima de pedido.",
     datos: [

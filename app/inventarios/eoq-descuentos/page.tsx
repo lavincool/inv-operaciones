@@ -299,7 +299,7 @@ export default function EOQDescuentosPage() {
           <div>
             <Typography type="h1">EOQ con Descuentos por Cantidad</Typography>
             <Typography className="mt-2" color="muted" type="body">
-              Evalua si conviene aceptar un descuento del proveedor aumentando el tamano del pedido, comparando el Costo Total Anual incluyendo compra de material
+              Evalúa si conviene aceptar un descuento del proveedor aumentando el tamaño del pedido, comparando el Costo Total Anual incluyendo compra de material
             </Typography>
             <Button
               className="mt-4"
@@ -441,7 +441,7 @@ export default function EOQDescuentosPage() {
                 <Typography className="text-xs" color="muted" type="body-sm">
                   H1 = i x C1 = {fmtPercent(tasaMantenimiento)} x {fmtCurrency(precioNormal)} = {fmtCurrency(H1)}
                   <br />
-                  H2 = i x C2 = {fmtPercent(tasaMantenimiento)} x {fmtCurrency(precioDescuento)} = {fmtCurrency(H2)} (Costo de mantener una unidad durante un ano)
+                  H2 = i x C2 = {fmtPercent(tasaMantenimiento)} x {fmtCurrency(precioDescuento)} = {fmtCurrency(H2)} (Costo de mantener una unidad durante un año)
                 </Typography>
               </div>
             </div>
@@ -713,8 +713,8 @@ export default function EOQDescuentosPage() {
                     Enunciado
                   </Typography>
                   <Typography className="text-sm leading-relaxed" type="body">
-                    La Precision Company compra valvulas de solenoide para usarlas en su linea de soldadoras de puntos. La compania compra por lo menos{" "}
-                    <strong className="text-accent">400</strong> valvulas al ano, y con un costo de{" "}
+                    La Precision Company compra valvulas de solenoide para usarlas en su linea de soldadoras de puntos. La compañía compra por lo menos{" "}
+                    <strong className="text-accent">400</strong> valvulas al año, y con un costo de{" "}
                     <strong className="text-accent">$50 dls</strong> cada una. Los costos cargados al inventario son de{" "}
                     <strong className="text-accent">20%</strong> del valor promedio de inventario y los costos de pedidos son de{" "}
                     <strong className="text-accent">$20 dls</strong> por pedido. La empresa ha recibido una proposicion del proveedor para concederle un descuento de{" "}
@@ -733,7 +733,7 @@ export default function EOQDescuentosPage() {
                     Datos del Problema
                   </Typography>
                   <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                    <div><strong>D</strong> = 400 unid/ano</div>
+                    <div><strong>D</strong> = 400 unid/año</div>
                     <div><strong>S</strong> = $20 / pedido</div>
                     <div><strong>i</strong> = 20% = 0.20</div>
                     <div><strong>C1</strong> = $50 / unid (normal)</div>
@@ -761,8 +761,8 @@ export default function EOQDescuentosPage() {
                         1. Costo de Mantenimiento:
                       </Typography>
                       <Typography className="leading-relaxed" color="muted" type="body-sm">
-                        H1 = i x C1 = 0.20 x 50 = $10 / unid-ano<br />
-                        H2 = i x C2 = 0.20 x 49 = $9.80 / unid-ano
+                        H1 = i x C1 = 0.20 x 50 = $10 / unid-año<br />
+                        H2 = i x C2 = 0.20 x 49 = $9.80 / unid-año
                       </Typography>
                     </div>
 
@@ -804,7 +804,7 @@ export default function EOQDescuentosPage() {
                         Decision: Si conviene aceptar el descuento.
                       </Typography>
                       <Typography className="leading-relaxed" color="muted" type="body-sm">
-                        CTA2 ($20,170) &lt; CTA1 ($20,400) → Ahorro de $230 al ano.
+                        CTA2 ($20,170) &lt; CTA1 ($20,400) → Ahorro de $230 al año.
                         La empresa debe ordenar 100 valvulas por pedido para aprovechar el descuento del 2%.
                       </Typography>
                     </div>

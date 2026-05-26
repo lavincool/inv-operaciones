@@ -383,7 +383,7 @@ export default function EOQEscasezPage() {
                   onChange={setCostoEscasez}
                 />
                 <ParamField
-                  label="L &mdash; Dias Laborables / ano"
+                  label="L &mdash; Días Laborables / año"
                   maxValue={365}
                   minValue={1}
                   step={1}
@@ -517,7 +517,7 @@ export default function EOQEscasezPage() {
                   </div>
                   <div>
                     <Card.Title>Tiempo entre Ordenes (T)</Card.Title>
-                    <Card.Description>En anos</Card.Description>
+                    <Card.Description>En años</Card.Description>
                   </div>
                 </div>
               </Card.Header>
@@ -654,7 +654,7 @@ export default function EOQEscasezPage() {
                     una unidad en inventario es de{" "}
                     <strong className="text-accent">$50</strong> y el costo anual por faltante
                     de una unidad es de <strong className="text-accent">$80</strong>. La
-                    empresa labora <strong className="text-accent">300</strong> dias al ano.
+                    empresa labora <strong className="text-accent">300</strong> días al año.
                     Se permite la escasez controlada del producto.
                   </Typography>
                 </div>
@@ -669,11 +669,11 @@ export default function EOQEscasezPage() {
                     Datos del Problema
                   </Typography>
                   <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                    <div><strong>D</strong> = 6,000 unid/ano</div>
+                    <div><strong>D</strong> = 6,000 unid/año</div>
                     <div><strong>S</strong> = $300 / orden</div>
-                    <div><strong>H</strong> = $50 / unid-ano</div>
-                    <div><strong>P</strong> = $80 / unid-ano</div>
-                    <div><strong>L</strong> = 300 dias / ano</div>
+                    <div><strong>H</strong> = $50 / unid-año</div>
+                    <div><strong>P</strong> = $80 / unid-año</div>
+                    <div><strong>L</strong> = 300 días / año</div>
                   </div>
                 </div>
 
@@ -692,7 +692,7 @@ export default function EOQEscasezPage() {
                     <li>Calcule el nivel maximo de inventario (S_max).</li>
                     <li>¿Cual es la escasez maxima (W) por ciclo?</li>
                     <li>Calcule el costo total anual asociado (CTA).</li>
-                    <li>Determine el numero de pedidos al ano (N) y el tiempo entre ordenes (T y T_dias).</li>
+                    <li>Determine el número de pedidos al año (N) y el tiempo entre ordenes (T y T_dias).</li>
                   </ol>
                 </div>
               </div>

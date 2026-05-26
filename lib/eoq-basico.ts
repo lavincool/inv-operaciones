@@ -18,7 +18,7 @@ export interface EOQBasicoDesgloses {
 }
 
 export interface EOQBasicoInput {
-  /** Demanda total durante un ano (unidades) */
+  /** Demanda total durante un año (unidades) */
   demandaAnual: number;
   /** Costo fijo por realizar una orden (moneda) */
   costoPedido: number;
@@ -33,7 +33,7 @@ export interface EOQBasicoInput {
 export interface EOQBasicoOutput {
   /** Tamano del lote a pedir — Q optima */
   cantidadOptima: number;
-  /** Veces al ano que se ordena */
+  /** Veces al año que se ordena */
   numeroPedidos: number;
   /** Suma del costo de ordenar y mantener */
   costoTotal: number;
@@ -67,7 +67,7 @@ function f4(value: number): string {
  *   C = Costo unitario del articulo (moneda)
  *
  * Este costo representa cuanto cuesta mantener UNA unidad almacenada durante
- * un ano completo. Es el costo de oportunidad del capital invertido + costos
+ * un año completo. Es el costo de oportunidad del capital invertido + costos
  * de almacenamiento, seguros, obsolescencia, etc.
  */
 function costoMantenimientoAnual(
@@ -121,12 +121,12 @@ function cantidadOptimaPedido(
  *   D = Demanda anual (unidades)
  *   Q = Cantidad optima de pedido (unidades)
  *
- * Indica cuantas ordenes se deben colocar durante el ano. A mayor Q, menos
+ * Indica cuántas órdenes se deben colocar durante el año. A mayor Q, menos
  * pedidos (y viceversa).
  */
 function numeroPedidosAnual(demandaAnual: number, qOptima: number): number {
-  // Dividir la demanda total entre el tamano de cada lote nos da el numero
-  // de lotes (pedidos) necesarios para cubrir el ano.
+  // Dividir la demanda total entre el tamaño de cada lote nos da el número
+  // de lotes (pedidos) necesarios para cubrir el año.
   return demandaAnual / qOptima;
 }
 
@@ -213,12 +213,12 @@ function puntoReordenComplejo(
   tiempoEntregaSemanas: number,
 ): number {
   // Paso 5.1 — Calcular la demanda semanal.
-  // Asumimos 52 semanas por ano (estandar en modelos de inventarios).
+  // Asumimos 52 semanas por año (estándar en modelos de inventarios).
   // La demanda semanal es simplemente la demanda anual repartida entre 52.
   const d_sem = demandaAnual / 52;
 
   // Paso 5.2 — Calcular el tiempo de ciclo en semanas.
-  // t = Q / d_sem responde: "¿cuantas semanas dura un lote de tamano Q
+  // t = Q / d_sem responde: "¿cuántas semanas dura un lote de tamaño Q
   // si cada semana se consumen d_sem unidades?"
   const t = qOptima / d_sem;
 

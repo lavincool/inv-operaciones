@@ -226,9 +226,8 @@ function ResultadoCard({
       <Card.Header>
         <div className="flex items-center gap-3">
           <div
-            className={`flex size-9 items-center justify-center rounded-lg ${
-              esGanador ? "bg-success/15 text-success" : "bg-default-100 text-muted"
-            }`}
+            className={`flex size-9 items-center justify-center rounded-lg ${esGanador ? "bg-success/15 text-success" : "bg-default-100 text-muted"
+              }`}
           >
             <Icon className="size-4.5" />
           </div>
@@ -387,8 +386,8 @@ export default function MakeBuyPage() {
   /* ---- labels dinamicos ---- */
   const costoLabel = esAnual ? "Costo Total Anual" : "Costo Total Mensual";
   const costoCardLabel = esAnual ? "CTA" : "CTM";
-  const opsLabelExt = esAnual ? "Pedidos por Anio" : "Pedidos por Mes";
-  const opsLabelFab = esAnual ? "Corridas de Prod. por Anio" : "Corridas de Prod. por Mes";
+  const opsLabelExt = esAnual ? "Pedidos por Año" : "Pedidos por Mes";
+  const opsLabelFab = esAnual ? "Corridas de Prod. por Año" : "Corridas de Prod. por Mes";
   const periodoLabel = esAnual ? "Anual" : "Mensual";
   const ahorroLabel = esAnual ? "Ahorro Anual" : "Ahorro Mensual";
   const costoGlobalLabel = esAnual ? "Costo Total Anual Global" : "Costo Total Mensual Global";

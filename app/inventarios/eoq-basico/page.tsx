@@ -1,16 +1,17 @@
 "use client";
 
-import { useMemo, useState, useCallback, useRef, useEffect } from "react";
+import { useMemo, useState, useCallback, useLayoutEffect } from "react";
 import "katex/dist/katex.min.css";
 import {
   Button,
   Card,
   Label,
+  Modal,
   NumberField,
   Separator,
   Typography,
 } from "@heroui/react";
-import { RotateCcw, ArrowLeft, Package, ShoppingCart, TrendingUp, AlertTriangle } from "lucide-react";
+import { RotateCcw, ArrowLeft, Package, ShoppingCart, TrendingUp, AlertTriangle, BookOpen } from "lucide-react";
 import Link from "next/link";
 import {
   calculateEOQBasico,
@@ -73,27 +74,36 @@ function fmtPercent(value: number): string {
 /* ------------------------------------------------------------------ */
 
 function LatexFormula({ latex }: { latex: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [html, setHtml] = useState<string>("");
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    try {
-      Promise.resolve().then(async () => {
-        const katex = (await import("katex")).default;
-        if (containerRef.current) {
-          katex.render(latex, containerRef.current, {
+  useLayoutEffect(() => {
+    let cancelled = false;
+    import("katex")
+      .then((m) => m.default)
+      .then((katex) => {
+        if (cancelled) return;
+        setHtml(
+          katex.renderToString(latex, {
             throwOnError: false,
             displayMode: true,
             output: "htmlAndMathml",
-          });
-        }
+          }),
+        );
+      })
+      .catch(() => {
+        // Silently fail for malformed LaTeX
       });
-    } catch {
-      // Silently fail for malformed LaTeX
-    }
+    return () => {
+      cancelled = true;
+    };
   }, [latex]);
 
-  return <div ref={containerRef} className="overflow-x-auto py-1" />;
+  return (
+    <div
+      className="overflow-x-auto py-1"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -171,6 +181,7 @@ export default function EOQBasicoPage() {
   const [costoUnitario, setCostoUnitario] = useState(DEFAULT_PARAMS.costoUnitario);
   const [tasaMantenimiento, setTasaMantenimiento] = useState(DEFAULT_PARAMS.tasaMantenimiento);
   const [tiempoEntrega, setTiempoEntrega] = useState(DEFAULT_PARAMS.tiempoEntrega);
+  const [isExampleOpen, setIsExampleOpen] = useState(false);
 
   /* ---- calculos ---- */
   const input: EOQBasicoInput = useMemo(
@@ -230,6 +241,15 @@ export default function EOQBasicoPage() {
         <Typography className="mt-2" color="muted" type="body">
           Calculo de la Cantidad Economica de Pedido clasica con Punto de Reorden Complejo para Lead Times largos
         </Typography>
+        <Button
+          className="mt-4"
+          size="sm"
+          variant="secondary"
+          onPress={() => setIsExampleOpen(true)}
+        >
+          <BookOpen className="size-3.5" />
+          Leer ejemplo de ejercicio
+        </Button>
       </div>
 
       {/* Parametros */}
@@ -462,6 +482,90 @@ export default function EOQBasicoPage() {
           </Card.Content>
         </Card>
       )}
+
+      {/* Modal: Ejemplo de ejercicio */}
+      <Modal.Backdrop isOpen={isExampleOpen} onOpenChange={setIsExampleOpen}>
+        <Modal.Container scroll="inside" size="lg">
+          <Modal.Dialog className="sm:max-w-2xl">
+            <Modal.CloseTrigger />
+            <Modal.Header>
+              <Modal.Heading>Ejemplo de Ejercicio Resuelto</Modal.Heading>
+              <p className="text-sm text-muted">
+                Fabricacion de escritorios — Modelo EOQ Basico con Punto de Reorden
+              </p>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="space-y-6">
+                {/* Enunciado */}
+                <div className="rounded-lg border border-accent/30 bg-accent/5 p-4">
+                  <Typography
+                    className="mb-2 text-xs font-semibold uppercase tracking-wider"
+                    color="muted"
+                    type="body-sm"
+                  >
+                    Enunciado
+                  </Typography>
+                  <Typography className="text-sm leading-relaxed" type="body">
+                    La demanda de escritorios para una fabrica de muebles para oficina es{" "}
+                    <strong className="text-accent">6000</strong> al ano en promedio. Cada vez que se
+                    hace un pedido de escritorios se incurre en un costo de{" "}
+                    <strong className="text-accent">$300</strong> dolares. El costo anual por tener en
+                    inventario un solo escritorio es del <strong className="text-accent">25%</strong>{" "}
+                    de su costo, que es <strong className="text-accent">$200</strong> dolares.
+                    Transcurre <strong className="text-accent">1 semana</strong> entre el momento en
+                    que se hace un pedido y la llegada del mismo. Suponga que no se permite escasez.
+                  </Typography>
+                </div>
+
+                {/* Datos */}
+                <div className="rounded-lg border border-default-200 bg-default-50 p-4">
+                  <Typography
+                    className="mb-2 text-xs font-semibold uppercase tracking-wider"
+                    color="muted"
+                    type="body-sm"
+                  >
+                    Datos del Problema
+                  </Typography>
+                  <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
+                    <div><strong>D</strong> = 6000 unid/ano</div>
+                    <div><strong>S</strong> = $300 / pedido</div>
+                    <div><strong>C</strong> = $200 / escritorio</div>
+                    <div><strong>i</strong> = 25% = 0.25</div>
+                    <div><strong>L</strong> = 1 semana (inciso d)</div>
+                    <div><strong>L&prime;</strong> = 5 semanas (inciso d alterno)</div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="rounded-lg border border-default-200 bg-default-50 p-4">
+                  <Typography
+                    className="mb-2 text-xs font-semibold uppercase tracking-wider"
+                    color="muted"
+                    type="body-sm"
+                  >
+                    Preguntas del Ejercicio
+                  </Typography>
+                  <ol className="list-inside list-decimal space-y-1 text-sm">
+                    <li>¿Cuantos escritorios se deben pedir cada vez que se hace un pedido?</li>
+                    <li>¿Cuantos pedidos se pueden colocar en un ano?</li>
+                    <li>Calcule los costos totales anuales.</li>
+                    <li>
+                      Determine el punto de reorden. Si el tiempo de entrega fuera 5 semanas
+                      ¿cual seria el punto de reorden?
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button slot="close" variant="secondary">
+                Cerrar
+              </Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
     </div>
   );
 }

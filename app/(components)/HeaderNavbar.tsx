@@ -54,6 +54,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { title: "Población Finita", path: "/lineas-espera/poblacion-finita" },
       { title: "Población Infinita", path: "/lineas-espera/poblacion-infinita" },
       { title: "Múltiples Canales", path: "/lineas-espera/multiples-canales" },
+      { title: "M/M/s vs M/M/1 (Filas Comunes vs Separadas)", path: "/lineas-espera/mms-vs-mm1" },
     ],
   },
 ];

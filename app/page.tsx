@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog, Gauge, AlertTriangle } from "lucide-react";
+import { Boxes, Clock, ArrowRight, TrendingUp, Users, DollarSign, Package, Percent, Calendar, Cog, Gauge, AlertTriangle, Car } from "lucide-react";
 import { Card, Badge, Typography } from "@heroui/react";
 import Link from "next/link";
 
@@ -41,6 +41,13 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Modelo EOQ que permite escasez (faltantes) controlada, minimizando costos de ordenar, mantener y penalizaciones por deficit.",
         icon: AlertTriangle,
+      },
+      {
+        title: "EOQ Avanzado (Taxis)",
+        path: "/inventarios/eoq-taxis",
+        description:
+          "Calcula la cantidad optima de pedido evaluando escenarios sin faltantes, con escasez y con descuentos por volumen (tasas mensuales).",
+        icon: Car,
       },
       {
         title: "EPQ (Lote de Produccion)",
@@ -113,6 +120,13 @@ const CATEGORIES: CategorySection[] = [
         description:
           "Sistema con varios servidores en paralelo atendiendo una cola comun.",
         icon: Package,
+      },
+      {
+        title: "M/M/s vs M/M/1",
+        path: "/lineas-espera/mms-vs-mm1",
+        description:
+          "Compara la eficiencia de una fila comun versus filas separadas por servidor. Analiza tiempos de espera.",
+        icon: Users,
       },
     ],
   },

@@ -9,11 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.80",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@heroui/react": "^3.0.5",
     "@heroui/styles": "^3.0.5",
     "@libsql/client": "^0.17.3",
     "@next/swc-darwin-arm64": "^16.2.6",
+    "ai": "^6.0.193",
     "katex": "^0.17.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

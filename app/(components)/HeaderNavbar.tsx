@@ -17,6 +17,7 @@ import {
   Boxes,
   Clock,
   Home,
+  ScanLine,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -145,6 +146,17 @@ export default function HeaderNavbar() {
             <Home className="size-4" />
             <span>Inicio</span>
           </Link>
+          <Link
+            href="/scanner"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              pathname.startsWith("/scanner")
+                ? "text-accent bg-accent/10"
+                : "text-foreground/70 hover:text-foreground hover:bg-default-100"
+            }`}
+          >
+            <ScanLine className="size-4" />
+            <span>Escáner</span>
+          </Link>
           {NAV_CATEGORIES.map((cat) => (
             <Dropdown key={cat.category}>
               <DropdownTrigger
@@ -205,6 +217,19 @@ export default function HeaderNavbar() {
               >
                 <Home className="size-4.5 shrink-0" />
                 <span>Inicio</span>
+              </Link>
+
+              <Link
+                href="/scanner"
+                onClick={() => setIsMenuOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  pathname.startsWith("/scanner")
+                    ? "bg-accent/10 text-accent"
+                    : "text-foreground/70 hover:bg-default-100 hover:text-foreground"
+                }`}
+              >
+                <ScanLine className="size-4.5 shrink-0" />
+                <span>Escáner</span>
               </Link>
 
               <Separator className="my-1" />

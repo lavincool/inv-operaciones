@@ -459,19 +459,24 @@ export function calculateMM1K(input: MM1KInput): MM1KOutput {
   const N = Math.round(n);
   if (N < 0 || N > K) throw new Error(`n debe estar entre 0 y K (${K}).`);
 
-  // P0 via sumatoria
+  const r = lambda / mu;
+
+  // P0: sumatoria iterativa (evita overflow factorial)
   let sumP0 = 0;
+  let term = 1;
   for (let i = 0; i <= K; i++) {
-    const termino = permutacion(K, i) * Math.pow(lambda / mu, i);
-    sumP0 += termino;
+    sumP0 += term;
+    if (i < K) {
+      term *= (K - i) * r;
+    }
   }
 
   if (sumP0 === 0) throw new Error("Error en calculo de P0: sumatoria dio cero.");
 
   const P0 = 1 / sumP0;
-  const P = 1 - P0; // fraccion de tiempo que el servidor esta ocupado
+  const P = 1 - P0;
   const L = K - (mu / lambda) * (1 - P0);
-  const Lq = L - (1 - P0);
+  const Lq = K - ((lambda + mu) / lambda) * (1 - P0);
 
   const lambdaEff = lambda * (K - L);
 
@@ -479,16 +484,16 @@ export function calculateMM1K(input: MM1KInput): MM1KOutput {
   const Wq = lambdaEff > 0 ? Lq / lambdaEff : 0;
 
   // Pn
-  const Pn = permutacion(K, N) * Math.pow(lambda / mu, N) * P0;
+  const Pn = permutacion(K, N) * Math.pow(r, N) * P0;
 
   const CT = cs + ce * L;
 
   const desgloses: MM1KDesgloses = {
     P: `\\rho = 1 - P_0 = 1 - ${fmt(P0, 6)} = ${fmt(P)}`,
     Pn: `P_{${N}} = \\frac{${K}!}{(${K}-${N})!} \\cdot \\left(\\frac{${fmt(lambda)}}{${fmt(mu)}}\\right)^{${N}} \\cdot ${fmt(P0, 6)} = ${fmt(Pn, 6)}`,
-    P0: `P_0 = \\left[\\sum_{i=0}^{${K}} \\frac{${K}!}{(${K}-i)!} \\cdot \\left(\\frac{\\lambda}{\\mu}\\right)^i\\right]^{-1} = ${fmt(P0, 6)}`,
+    P0: `P_0 = \\left[\\sum_{i=0}^{${K}} \\frac{${K}!}{(${K}-i)!} \\cdot \\left(\\frac{${fmt(lambda)}}{${fmt(mu)}}\\right)^i\\right]^{-1} = ${fmt(P0, 6)}`,
     L: `L = K - \\frac{\\mu}{\\lambda} \\cdot (1 - P_0) = ${K} - \\frac{${fmt(mu)}}{${fmt(lambda)}} \\cdot ${fmt(1 - P0)} = ${fmt(L)}`,
-    Lq: `L_q = L - (1 - P_0) = ${fmt(L)} - ${fmt(1 - P0)} = ${fmt(Lq)}`,
+    Lq: `L_q = K - \\frac{\\lambda + \\mu}{\\lambda} \\cdot (1 - P_0) = ${K} - \\frac{${fmt(lambda + mu)}}{${fmt(lambda)}} \\cdot ${fmt(1 - P0)} = ${fmt(Lq)}`,
     W: `W = \\frac{L}{\\lambda_{\\text{eff}}} = \\frac{${fmt(L)}}{${fmt(lambdaEff)}} = ${fmt(W)}`,
     Wq: `W_q = \\frac{L_q}{\\lambda_{\\text{eff}}} = \\frac{${fmt(Lq)}}{${fmt(lambdaEff)}} = ${fmt(Wq)}`,
     CT: `CT = c_s + c_e \\cdot L = ${cs} + ${ce} \\cdot ${fmt(L)} = \\$${fmt(CT)}`,

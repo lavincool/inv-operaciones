@@ -31,6 +31,7 @@ import {
   calculateMC1,
   calculateMM1N,
   calculateMMS,
+  calculateMM1K,
   type UnidadTiempo,
   type TipoEntrada,
   type UnitConfig,
@@ -38,9 +39,10 @@ import {
   type MC1Output,
   type MM1NOutput,
   type MMSOutput,
+  type MM1KOutput,
 } from "@/lib/colas-operaciones";
 
-type ModelType = "mm1" | "mc1" | "mm1n" | "mms";
+type ModelType = "mm1" | "mc1" | "mm1n" | "mms" | "mm1k";
 
 const LAMBDA = "\u03BB";
 const MU = "\u03BC";
@@ -53,9 +55,10 @@ const MODEL_INFO: Record<ModelType, { title: string; desc: string; icon: React.E
   mc1: { title: "M/C/1 — Servicio Constante", desc: "Un servidor, llegadas Poisson, tiempo de servicio deterministico", icon: Timer, color: "text-warning" },
   mm1n: { title: "M/M/1/N — Capacidad Limitada", desc: "Un servidor con capacidad maxima N. Clientes rechazados al llenarse", icon: Hash, color: "text-success" },
   mms: { title: "M/M/S — Multiples Servidores", desc: "S servidores en paralelo, una sola fila, llegadas Poisson", icon: Users, color: "text-danger" },
+  mm1k: { title: "M/M/1/K — Poblacion Finita", desc: "Fuente finita de K clientes. La tasa de llegada depende de cuantos estan fuera del sistema", icon: Server, color: "text-secondary" },
 };
 
-const MODELOS: ModelType[] = ["mm1", "mc1", "mm1n", "mms"];
+const MODELOS: ModelType[] = ["mm1", "mc1", "mm1n", "mms", "mm1k"];
 
 /* ── Formateo ───────────────────────────────────────────────────────────── */
 
@@ -154,6 +157,7 @@ const DEFAULTS_MM1 = { lambda: 2, mu: 3, n: 2, cs: 100, ce: 50 };
 const DEFAULTS_MC1 = { lambda: 2, mu: 3, cs: 100, ce: 50 };
 const DEFAULTS_MM1N = { lambda: 2, mu: 3, capacidad: 10, cs: 100, ce: 50 };
 const DEFAULTS_MMS = { lambda: 4, mu: 3, servidores: 2, n: 3, cs: 100, ce: 50 };
+const DEFAULTS_MM1K = { lambda: 2, mu: 3, poblacion: 6, n: 2, cs: 100, ce: 50 };
 
 /* ════════════════════════════════════════════════════════════════════════════
  *  PAGINA PRINCIPAL
@@ -223,6 +227,13 @@ function ColasPage() {
   const [mmsCs, setMmsCs] = useState(qCs ?? DEFAULTS_MMS.cs);
   const [mmsCe, setMmsCe] = useState(qCe ?? DEFAULTS_MMS.ce);
 
+  const [mm1kLambda, setMm1kLambda] = useState(qLambda ?? DEFAULTS_MM1K.lambda);
+  const [mm1kMu, setMm1kMu] = useState(qMu ?? DEFAULTS_MM1K.mu);
+  const [mm1kPoblacion, setMm1kPoblacion] = useState(num("poblacion") ?? DEFAULTS_MM1K.poblacion);
+  const [mm1kN, setMm1kN] = useState(qN ?? DEFAULTS_MM1K.n);
+  const [mm1kCs, setMm1kCs] = useState(qCs ?? DEFAULTS_MM1K.cs);
+  const [mm1kCe, setMm1kCe] = useState(qCe ?? DEFAULTS_MM1K.ce);
+
   /* ── Change model ────────────────────────────────────────────────────── */
 
   const handleChangeModel = useCallback((m: ModelType) => {
@@ -251,12 +262,18 @@ function ColasPage() {
     try { return calculateMMS({ lambda: mmsLambda, mu: mmsMu, servidores: mmsServidores, n: mmsN, cs: mmsCs, ce: mmsCe, unitConfig }); } catch { return null; }
   }, [model, mmsLambda, mmsMu, mmsServidores, mmsN, mmsCs, mmsCe, unitConfig]);
 
+  const mm1kResult: MM1KOutput | null = useMemo(() => {
+    if (model !== "mm1k") return null;
+    try { return calculateMM1K({ lambda: mm1kLambda, mu: mm1kMu, poblacion: mm1kPoblacion, n: mm1kN, cs: mm1kCs, ce: mm1kCe, unitConfig }); } catch { return null; }
+  }, [model, mm1kLambda, mm1kMu, mm1kPoblacion, mm1kN, mm1kCs, mm1kCe, unitConfig]);
+
   /* ── Reset handlers ──────────────────────────────────────────────────── */
 
   const resetMM1 = useCallback(() => { setMm1Lambda(DEFAULTS_MM1.lambda); setMm1Mu(DEFAULTS_MM1.mu); setMm1N(DEFAULTS_MM1.n); setMm1Cs(DEFAULTS_MM1.cs); setMm1Ce(DEFAULTS_MM1.ce); }, []);
   const resetMC1 = useCallback(() => { setMc1Lambda(DEFAULTS_MC1.lambda); setMc1Mu(DEFAULTS_MC1.mu); setMc1Cs(DEFAULTS_MC1.cs); setMc1Ce(DEFAULTS_MC1.ce); }, []);
   const resetMM1N = useCallback(() => { setMm1nLambda(DEFAULTS_MM1N.lambda); setMm1nMu(DEFAULTS_MM1N.mu); setMm1nCapacidad(DEFAULTS_MM1N.capacidad); setMm1nCs(DEFAULTS_MM1N.cs); setMm1nCe(DEFAULTS_MM1N.ce); }, []);
   const resetMMS = useCallback(() => { setMmsLambda(DEFAULTS_MMS.lambda); setMmsMu(DEFAULTS_MMS.mu); setMmsServidores(DEFAULTS_MMS.servidores); setMmsN(DEFAULTS_MMS.n); setMmsCs(DEFAULTS_MMS.cs); setMmsCe(DEFAULTS_MMS.ce); }, []);
+  const resetMM1K = useCallback(() => { setMm1kLambda(DEFAULTS_MM1K.lambda); setMm1kMu(DEFAULTS_MM1K.mu); setMm1kPoblacion(DEFAULTS_MM1K.poblacion); setMm1kN(DEFAULTS_MM1K.n); setMm1kCs(DEFAULTS_MM1K.cs); setMm1kCe(DEFAULTS_MM1K.ce); }, []);
 
   /* ── Render ──────────────────────────────────────────────────────────── */
 
@@ -692,6 +709,135 @@ function ColasPage() {
           {!mmsResult && (
             <Card className="border border-danger/30 bg-danger/5">
               <Card.Content className="py-8 text-center"><Typography color="muted" type="body">El sistema no es estable. Verifique que {LAMBDA} &lt; S·{MU} y que todos los parametros sean validos.</Typography></Card.Content>
+            </Card>
+          )}
+        </>
+      )}
+
+      {/* ============================================= */}
+      {/* MODELO: M/M/1/K                              */}
+      {/* ============================================= */}
+      {model === "mm1k" && (
+        <>
+          <Card className="mb-8">
+            <Card.Header>
+              <div className="flex w-full items-center justify-between">
+                <div><Card.Title>Parametros M/M/1/K</Card.Title><Card.Description>Un servidor, poblacion finita de K clientes. La tasa de llegada efectiva depende del numero de clientes fuera del sistema.</Card.Description></div>
+                <Button isDisabled={mm1kLambda === DEFAULTS_MM1K.lambda && mm1kMu === DEFAULTS_MM1K.mu && mm1kPoblacion === DEFAULTS_MM1K.poblacion && mm1kN === DEFAULTS_MM1K.n && mm1kCs === DEFAULTS_MM1K.cs && mm1kCe === DEFAULTS_MM1K.ce} size="sm" variant="tertiary" onPress={resetMM1K}>
+                  <RotateCcw className="size-3.5" />Restablecer
+                </Button>
+              </div>
+            </Card.Header>
+            <Card.Content>
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <ParamField label={`${LAMBDA} — Tasa de Llegada por Cliente`} formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 2 }} maxValue={1000} minValue={0.001} step={0.01} value={mm1kLambda} onChange={setMm1kLambda} />
+                  <ParamField label={`${MU} — Tasa de Servicio`} formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 2 }} maxValue={1000} minValue={0.001} step={0.01} value={mm1kMu} onChange={setMm1kMu} />
+                  <ParamField label="K — Poblacion (Fuente Finita)" formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 0 }} maxValue={100} minValue={1} step={1} value={mm1kPoblacion} onChange={(v) => setMm1kPoblacion(Math.round(v))} />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <UnitSelector label={`Unidades de ${LAMBDA}`} value={lambdaUnit} options={[{ value: "minuto", label: "Minutos" }, { value: "hora", label: "Horas" }]} onChange={(v) => setLambdaUnit(v as UnidadTiempo)} />
+                  <UnitSelector label={`Unidades de ${MU}`} value={muUnit} options={[{ value: "minuto", label: "Minutos" }, { value: "hora", label: "Horas" }]} onChange={(v) => setMuUnit(v as UnidadTiempo)} />
+                  <UnitSelector label={`Tipo de entrada ${LAMBDA}`} value={lambdaType} options={[{ value: "cliente_tiempo", label: "Clientes / tiempo" }, { value: "tiempo_cliente", label: "Tiempo / cliente" }]} onChange={(v) => setLambdaType(v as TipoEntrada)} />
+                  <UnitSelector label={`Tipo de entrada ${MU}`} value={muType} options={[{ value: "cliente_tiempo", label: "Clientes / tiempo" }, { value: "tiempo_cliente", label: "Tiempo / cliente" }]} onChange={(v) => setMuType(v as TipoEntrada)} />
+                </div>
+
+                <Separator />
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <ParamField label={`n — Clientes para ${PN}`} formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 0 }} maxValue={mm1kPoblacion} step={1} value={mm1kN} onChange={(v) => setMm1kN(Math.round(v))} />
+                  <ParamField label="cs — Costo Servicio ($/h)" formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 2 }} maxValue={100000} step={1} value={mm1kCs} onChange={setMm1kCs} />
+                  <ParamField label="ce — Costo Espera ($/h)" formatOptions={{ minimumFractionDigits: 0, maximumFractionDigits: 2 }} maxValue={100000} step={1} value={mm1kCe} onChange={setMm1kCe} />
+                </div>
+
+                {mm1kResult && (
+                  <div className="rounded-lg border border-default-200 bg-default-50 p-3">
+                    <Typography className="text-xs" color="muted" type="body-sm">
+                      <strong>Valores convertidos:</strong> {LAMBDA}&prime; = {fmtDecimal(mm1kResult.lambdaConv)} /h, {MU}&prime; = {fmtDecimal(mm1kResult.muConv)} /h
+                    </Typography>
+                  </div>
+                )}
+              </div>
+            </Card.Content>
+          </Card>
+
+          {mm1kResult && (
+            <>
+              <Typography type="h2" className="mb-4">Resultados M/M/1/K</Typography>
+
+              <div className="mb-4 rounded-lg border border-secondary/20 bg-secondary/5 p-3">
+                <div className="flex items-center gap-2">
+                  <Server className="size-4 text-secondary" />
+                  <Typography className="text-xs" color="muted" type="body-sm">
+                    <strong>Tasa efectiva de llegada:</strong> {LAMBDA}<sub>eff</sub> = {fmtDecimal(mm1kResult.lambdaEff)} /h &middot; Tasa por cliente = {fmtDecimal(mm1kResult.lambdaConv)} /h &middot; Poblacion K = {mm1kPoblacion}
+                  </Typography>
+                </div>
+              </div>
+
+              <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">{RHO} (Utilizacion)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.P)}</Typography>
+                  <Chip className="mt-2" color={mm1kResult.P >= 0.8 ? "warning" : "success"} size="sm" variant="soft">{mm1kResult.P >= 0.8 ? "Alto" : "Estable"}</Chip>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">{P0} (Sistema Vacio)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.P0, 6)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">Lq (En Fila)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.Lq)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">L (En Sistema)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.L)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">Wq (Tiempo en Fila)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.Wq)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">W (Tiempo en Sistema)</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.W)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center"><Card.Content className="py-4">
+                  <Typography className="text-xs" color="muted" type="body-sm">{PN}(n={mm1kN})</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums" type="body">{fmtDecimal(mm1kResult.Pn, 6)}</Typography>
+                </Card.Content></Card>
+                <Card className="text-center ring-2 ring-accent/50"><Card.Content className="py-4">
+                  <Typography className="text-xs text-accent font-semibold" type="body-sm">Costo Total</Typography>
+                  <Typography className="mt-1 text-xl font-bold tabular-nums text-accent" type="body">{fmtCurrency(mm1kResult.CT)}</Typography>
+                </Card.Content></Card>
+              </div>
+
+              <Card>
+                <Card.Header><Card.Title>Desglose de Calculos</Card.Title></Card.Header>
+                <Card.Content>
+                  <div className="space-y-4">
+                    <PasoDesglose label="Utilizacion del Sistema (ρ)" latex={mm1kResult.desgloses.P} />
+                    <Separator />
+                    <PasoDesglose label={`Probabilidad de ${mm1kN} clientes (P${mm1kN})`} latex={mm1kResult.desgloses.Pn} />
+                    <Separator />
+                    <PasoDesglose label="Probabilidad Sistema Vacio (P0)" latex={mm1kResult.desgloses.P0} />
+                    <Separator />
+                    <PasoDesglose label="Clientes en el Sistema (L)" latex={mm1kResult.desgloses.L} />
+                    <Separator />
+                    <PasoDesglose label="Clientes en la Fila (Lq)" latex={mm1kResult.desgloses.Lq} />
+                    <Separator />
+                    <PasoDesglose label="Tiempo en el Sistema (W)" latex={mm1kResult.desgloses.W} />
+                    <Separator />
+                    <PasoDesglose label="Tiempo en la Fila (Wq)" latex={mm1kResult.desgloses.Wq} />
+                    <Separator />
+                    <PasoDesglose label="Costo Total del Sistema (CT)" latex={mm1kResult.desgloses.CT} />
+                  </div>
+                </Card.Content>
+              </Card>
+            </>
+          )}
+          {!mm1kResult && (
+            <Card className="border border-danger/30 bg-danger/5">
+              <Card.Content className="py-8 text-center"><Typography color="muted" type="body">Verifique que {LAMBDA}, {MU} y K sean mayores a cero y que K sea un entero ≥ 1.</Typography></Card.Content>
             </Card>
           )}
         </>

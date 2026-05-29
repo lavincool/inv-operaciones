@@ -291,6 +291,36 @@ export const MODELS_CATALOG: ModelEntry[] = [
     ],
     redirectRoute: "/nuevo/colas",
   },
+  {
+    id: "mm1k",
+    family: "colas",
+    title: "M/M/1/K — Poblacion Finita",
+    description:
+      "Modelo de cola con un servidor y poblacion finita de K clientes (fuente finita). La tasa de llegada por cliente es λ, por lo que la tasa efectiva depende de cuantos clientes estan fuera del sistema. Util para modelar reparacion de maquinas con un solo reparador.",
+    keywords: [
+      "M/M/1/K", "poblacion finita", "fuente finita", "reparacion de maquinas",
+      "machine repair", "un reparador", "K maquinas", "tasa dependiente del estado",
+      "llegada por cliente", "poblacion limitada", "modelo de maquinas",
+    ],
+    parameters: [
+      { key: "lambda", label: "λ", type: "number", description: "Tasa de llegada por cliente (clientes/unidad de tiempo por cada cliente en la poblacion)" },
+      { key: "mu", label: "μ", type: "number", description: "Tasa de servicio (clientes/unidad de tiempo)" },
+      { key: "poblacion", label: "K", type: "number", description: "Tamaño de la poblacion finita (entero ≥ 1)" },
+    ],
+    formulas: [
+      "P₀ = 1 / Σ(i=0..K) [K!/(K-i)! * (λ/μ)^i]",
+      "ρ = 1 - P₀",
+      "L = K - (μ/λ) * (1 - P₀)",
+      "Lq = L - (1 - P₀)",
+      "λ_eff = λ * (K - L)",
+      "W = L / λ_eff",
+      "Wq = Lq / λ_eff",
+    ],
+    conditions: [
+      "λ > 0", "μ > 0", "K ≥ 1 (entero)",
+    ],
+    redirectRoute: "/nuevo/colas",
+  },
 ];
 
 export function getModelById(id: string): ModelEntry | undefined {

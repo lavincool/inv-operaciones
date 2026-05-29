@@ -1,6 +1,6 @@
 import { MODELS_CATALOG, type ModelEntry } from "@/lib/models-catalog";
 import { calculateCompra, calculateProduccion, calculateEscasez, calculateDescuentos, calculateProbabilistico } from "@/lib/inv-operaciones";
-import { calculateMM1, calculateMC1, calculateMM1N, calculateMMS } from "@/lib/colas-operaciones";
+import { calculateMM1, calculateMC1, calculateMM1N, calculateMMS, calculateMM1K } from "@/lib/colas-operaciones";
 
 /* ── Tipos de respuesta de Gemini ─────────────────────────────────────── */
 
@@ -50,7 +50,7 @@ ${modelsText}
 Responde ÚNICAMENTE con un objeto JSON válido, sin markdown, sin explicaciones. El JSON debe tener esta estructura exacta:
 
 {
-  "modelId": "<id del modelo: compra|produccion|escasez|descuentos|probabilistico|mm1|mc1|mm1n|mms>",
+  "modelId": "<id del modelo: compra|produccion|escasez|descuentos|probabilistico|mm1|mc1|mm1n|mms|mm1k>",
   "params": {
     "<key1>": <valor numérico>,
     "<key2>": <valor numérico>
@@ -75,7 +75,9 @@ Responde ÚNICAMENTE con un objeto JSON válido, sin markdown, sin explicaciones
 - "lead time", "tiempo de entrega", "L" en días → tiempoEntrega.
 - "varianza", "σ²" → varianza.
 - "servidores", "cajeros", "canales", "S" → servidores.
-- "capacidad máxima", "N", "límite del sistema" → capacidad.
+- "capacidad maxima", "N", "limite del sistema" → capacidad.
+- "poblacion finita", "fuente finita", "K maquinas", "reparacion de maquinas", "machine repair", "un reparador con K maquinas" → mm1k.
+- "poblacion", "tamaño de la poblacion", "clientes potenciales", "K" junto con "un servidor" → poblacion.
 `;
 }
 
@@ -178,6 +180,18 @@ export function executeModelCalculation(
         unitConfig: { lambdaUnit: "hora", muUnit: "hora", lambdaType: "cliente_tiempo", muType: "cliente_tiempo" },
       });
       return { P: result.P, P0: result.P0, L: result.L, Lq: result.Lq, W: result.W, Wq: result.Wq, CT: result.CT, servidoresActivos: result.servidoresActivos };
+    }
+    case "mm1k": {
+      const result = calculateMM1K({
+        lambda: params.lambda ?? 0,
+        mu: params.mu ?? 0,
+        poblacion: params.poblacion ?? 0,
+        n: 2,
+        cs: 100,
+        ce: 50,
+        unitConfig: { lambdaUnit: "hora", muUnit: "hora", lambdaType: "cliente_tiempo", muType: "cliente_tiempo" },
+      });
+      return { P: result.P, P0: result.P0, L: result.L, Lq: result.Lq, W: result.W, Wq: result.Wq, CT: result.CT, lambdaEff: result.lambdaEff };
     }
     default:
       throw new Error(`Modelo no reconocido: ${modelId}`);

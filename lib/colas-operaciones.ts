@@ -68,6 +68,16 @@ export function convertirUnidades(
  *  MODELO 1 — M/M/1: Cola Simple con un Servidor
  * ════════════════════════════════════════════════════════════════════════════ */
 
+function permutacion(n: number, k: number): number {
+  if (k < 0 || k > n) return 0;
+  if (k === 0) return 1;
+  let p = 1;
+  for (let i = 0; i < k; i++) {
+    p *= (n - i);
+  }
+  return p;
+}
+
 export interface MM1Input {
   lambda: number;
   mu: number;
@@ -395,4 +405,94 @@ export function calculateMMS(input: MMSInput): MMSOutput {
   };
 
   return { P: Rho, Pn, P0, L, Lq, W, Wq, CT, servidoresActivos, lambdaConv: lambda, muConv: mu, desgloses };
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+ *  MODELO 5 — M/M/1/K: Cola con Poblacion Finita (Fuente Finita)
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+export interface MM1KInput {
+  lambda: number;
+  mu: number;
+  poblacion: number;
+  n: number;
+  cs: number;
+  ce: number;
+  unitConfig: UnitConfig;
+}
+
+export interface MM1KDesgloses {
+  P: string;
+  Pn: string;
+  P0: string;
+  L: string;
+  Lq: string;
+  W: string;
+  Wq: string;
+  CT: string;
+}
+
+export interface MM1KOutput {
+  P: number;
+  Pn: number;
+  P0: number;
+  L: number;
+  Lq: number;
+  W: number;
+  Wq: number;
+  CT: number;
+  lambdaEff: number;
+  lambdaConv: number;
+  muConv: number;
+  desgloses: MM1KDesgloses;
+}
+
+export function calculateMM1K(input: MM1KInput): MM1KOutput {
+  const { lambda: lambdaRaw, mu: muRaw, poblacion, n, cs, ce, unitConfig } = input;
+  const { lambda, mu } = convertirUnidades(lambdaRaw, muRaw, unitConfig);
+
+  if (lambda <= 0 || mu <= 0 || poblacion <= 0) throw new Error("λ, μ y K deben ser mayores a cero.");
+
+  const K = Math.round(poblacion);
+  if (K < 1) throw new Error("La poblacion K debe ser al menos 1.");
+
+  const N = Math.round(n);
+  if (N < 0 || N > K) throw new Error(`n debe estar entre 0 y K (${K}).`);
+
+  // P0 via sumatoria
+  let sumP0 = 0;
+  for (let i = 0; i <= K; i++) {
+    const termino = permutacion(K, i) * Math.pow(lambda / mu, i);
+    sumP0 += termino;
+  }
+
+  if (sumP0 === 0) throw new Error("Error en calculo de P0: sumatoria dio cero.");
+
+  const P0 = 1 / sumP0;
+  const P = 1 - P0; // fraccion de tiempo que el servidor esta ocupado
+  const L = K - (mu / lambda) * (1 - P0);
+  const Lq = L - (1 - P0);
+
+  const lambdaEff = lambda * (K - L);
+
+  const W = lambdaEff > 0 ? L / lambdaEff : 0;
+  const Wq = lambdaEff > 0 ? Lq / lambdaEff : 0;
+
+  // Pn
+  const Pn = permutacion(K, N) * Math.pow(lambda / mu, N) * P0;
+
+  const CT = cs + ce * L;
+
+  const desgloses: MM1KDesgloses = {
+    P: `\\rho = 1 - P_0 = 1 - ${fmt(P0, 6)} = ${fmt(P)}`,
+    Pn: `P_{${N}} = \\frac{${K}!}{(${K}-${N})!} \\cdot \\left(\\frac{${fmt(lambda)}}{${fmt(mu)}}\\right)^{${N}} \\cdot ${fmt(P0, 6)} = ${fmt(Pn, 6)}`,
+    P0: `P_0 = \\left[\\sum_{i=0}^{${K}} \\frac{${K}!}{(${K}-i)!} \\cdot \\left(\\frac{\\lambda}{\\mu}\\right)^i\\right]^{-1} = ${fmt(P0, 6)}`,
+    L: `L = K - \\frac{\\mu}{\\lambda} \\cdot (1 - P_0) = ${K} - \\frac{${fmt(mu)}}{${fmt(lambda)}} \\cdot ${fmt(1 - P0)} = ${fmt(L)}`,
+    Lq: `L_q = L - (1 - P_0) = ${fmt(L)} - ${fmt(1 - P0)} = ${fmt(Lq)}`,
+    W: `W = \\frac{L}{\\lambda_{\\text{eff}}} = \\frac{${fmt(L)}}{${fmt(lambdaEff)}} = ${fmt(W)}`,
+    Wq: `W_q = \\frac{L_q}{\\lambda_{\\text{eff}}} = \\frac{${fmt(Lq)}}{${fmt(lambdaEff)}} = ${fmt(Wq)}`,
+    CT: `CT = c_s + c_e \\cdot L = ${cs} + ${ce} \\cdot ${fmt(L)} = \\$${fmt(CT)}`,
+  };
+
+  return { P, Pn, P0, L, Lq, W, Wq, CT, lambdaEff, lambdaConv: lambda, muConv: mu, desgloses };
 }
